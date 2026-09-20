@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Money Master Blog</title>
+    <script>
+      // Single Page App redirect for GitHub Pages
+      // Converts subpaths to hash routes so SPA can handle them
+      var pathSegmentsToKeep = 1;
+      var l = window.location;
+      var repoName = l.pathname.split('/')[1] || '';
+      var path = l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        '/' + repoName + '/#' + path + (l.search ? '?' + l.search.slice(1) : '') + l.hash
+      );
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to Money Master Blog...</p>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <rect width="600" height="600" fill="#ffffff"/>
+
+  <!-- MASTER text: cleanly positioned above the B -->
+  <text 
+    x="430" 
+    y="155" 
+    font-family="'Montserrat', 'Helvetica Neue', 'Arial', sans-serif" 
+    font-size="34" 
+    font-weight="400" 
+    letter-spacing="8" 
+    fill="#000000" 
+    text-anchor="middle"
+  >MASTER</text>
+
+  <!-- MB Monogram -->
+  <g fill="#000000">
+    <!-- M: Left Serif and Stem -->
+    <!-- Top arched serif beak/hook -->
+    <path d="
+      M 88 110
+      C 105 106 130 120 144 135
+      L 144 340
+      C 134 340 122 344 112 352
+      L 112 356
+      L 174 356
+      L 174 352
+      C 164 344 154 340 148 340
+      L 148 142
+      C 140 130 120 116 100 110
+      C 94 108 86 109 88 110
+      Z
+    "/>
+
+    <!-- M: Hairline Diagonal Rising from Base of Left Stem to Apex -->
+    <polygon points="148,340 252,136 264,136 158,346" />
+
+    <!-- M: Elegant Swelling Calligraphic Descending Stroke -->
+    <path d="
+      M 252 136
+      C 260 136 282 198 302 260
+      C 322 322 346 376 386 404
+      C 414 423 448 419 468 398
+      C 475 391 477 384 470 381
+      C 463 379 453 386 441 391
+      C 418 400 395 391 370 364
+      C 340 332 318 272 298 210
+      C 283 160 268 136 252 136
+      Z
+    "/>
+
+    <!-- B: Vertical Spine with Traditional Serif Caps -->
+    <path d="
+      M 310 174
+      L 358 174
+      L 358 179
+      C 348 180 343 184 340 194
+      L 340 376
+      C 343 384 350 388 360 389
+      L 360 394
+      L 310 394
+      L 310 389
+      C 320 388 327 384 330 376
+      L 330 194
+      C 327 184 320 180 310 179
+      Z
+    "/>
+
+    <!-- B: Upper Bowl with refined classic proportions -->
+    <path d="
+      M 340 179
+      C 376 179 415 184 418 218
+      C 420 250 382 268 340 268
+      L 340 258
+      C 370 258 402 244 400 218
+      C 398 195 368 189 340 189
+      Z
+    "/>
+
+    <!-- B: Lower Bowl with Luxurious Sweep -->
+    <path d="
+      M 340 268
+      C 395 268 452 285 457 334
+      C 462 390 400 405 340 405
+      L 340 395
+      C 388 395 442 380 437 334
+      C 432 292 385 278 340 278
+      Z
+    "/>
+  </g>
+
+  <!-- FINANCE text: Bold, tracked out, centered at bottom -->
+  <text 
+    x="300" 
+    y="485" 
+    font-family="'Montserrat', 'Helvetica Neue', 'Arial', sans-serif" 
+    font-size="48" 
+    font-weight="900" 
+    letter-spacing="16" 
+    fill="#000000" 
+    text-anchor="middle"
+  >FINANCE</text>
+</svg>

@@ -1,0 +1,6 @@
+{
+  "name": "Money Master Blog",
+  "description": "Money Master Blog provides simple online tools for generating color palettes, creating placeholder text, cleaning text, and completing everyday digital tasks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
