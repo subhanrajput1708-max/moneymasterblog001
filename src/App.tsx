@@ -240,7 +240,7 @@ export default function App() {
           <TermsPage />
         )}
         {currentPage === 'disclaimer' && (
-          <DisclaimerPage />
+          <DisclaimerPage onNavigate={handleNavigate} />
         )}
       </main>
 
