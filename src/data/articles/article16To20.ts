@@ -168,7 +168,7 @@ export const ARTICLES_16_TO_20: BlogArticle[] = [
       {
         question: 'Can we bookmark specific tools for quick access by our staff?',
         answer:
-          'Yes. Every tool has its own direct URL hash on Money Master Blog (e.g. `#tools/duplicate-remover`), allowing you to bookmark exact utilities in your team’s browser bar.'
+          'Yes. You can bookmark the dedicated Tools directory page on Money Master Blog (https://www.moneymasterblog.site/p/tools.html) in your team’s browser bar for instant access without any installation.'
       },
       {
         question: 'Is there a limit on how many lines we can process in a day?',

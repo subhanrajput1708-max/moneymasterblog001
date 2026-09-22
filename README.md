@@ -95,8 +95,27 @@ Production assets are generated in the `dist/` directory.
 
 ## 🗺️ Sitemap & Search Engine Optimization
 
-- **Sitemap**: `/public/sitemap.xml` (available at `https://www.moneymasterblog.site/sitemap.xml`)
-- **Robots**: `/public/robots.txt` (available at `https://www.moneymasterblog.site/robots.txt`)
+- **Sitemap Location**: `public/sitemap.xml` (deployed to `https://www.moneymasterblog.site/sitemap.xml`)
+- **Robots.txt Location**: `public/robots.txt` (deployed to `https://www.moneymasterblog.site/robots.txt`)
+- **Format**: Valid `sitemaps.org` XML (`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`)
+- **Total Indexable URLs**: 28 canonical URLs (8 standalone pages + 20 practical guides)
+- **Hash-Free Routing**: Zero `#` hash URLs exist in the sitemap or website routing. All URLs are clean, canonical paths:
+  - Homepage: `https://www.moneymasterblog.site/`
+  - Tools Directory: `https://www.moneymasterblog.site/p/tools.html`
+  - Guides & Blog: `https://www.moneymasterblog.site/p/blog-page.html`
+  - About Us: `https://www.moneymasterblog.site/p/about-us.html`
+  - Contact Us: `https://www.moneymasterblog.site/p/contact-us.html`
+  - Privacy Policy: `https://www.moneymasterblog.site/p/privacy-policy.html`
+  - Terms & Conditions: `https://www.moneymasterblog.site/p/terms-conditions.html`
+  - Website Disclaimer: `https://www.moneymasterblog.site/p/disclaimer.html`
+  - 20 Practical Guides: `https://www.moneymasterblog.site/{year}/{month}/{article-slug}.html`
+
+### 🔄 Automatic Sitemap Generation
+When new articles or pages are added to `src/data/blogArticles.ts` or `src/utils/routes.ts`, running:
+```bash
+npm run build
+```
+automatically generates the updated `sitemap.xml` and pre-rendered standalone HTML pages in both `public/` and `dist/`.
 
 ---
 

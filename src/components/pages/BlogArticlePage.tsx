@@ -24,6 +24,7 @@ import { BlogArticle, PageId, ToolId } from '../../types';
 import { BLOG_ARTICLES, getRelatedArticles } from '../../data/blogArticles';
 import { CATEGORY_STYLES } from './BlogPage';
 import FaqSection from '../common/FaqSection';
+import { PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from '../../utils/routes';
 
 interface BlogArticlePageProps {
   article: BlogArticle;
@@ -96,20 +97,20 @@ export default function BlogArticlePage({
             '@type': 'Person',
             name: 'Shahid Ali',
             jobTitle: 'Content Author & Web Utility Specialist',
-            url: 'https://www.moneymasterblog.site/#about'
+            url: getCanonicalUrl(PAGE_PATHS.about)
           },
           publisher: {
             '@type': 'Organization',
             name: 'Money Master Blog',
-            url: 'https://www.moneymasterblog.site/',
+            url: getCanonicalUrl(PAGE_PATHS.home),
             logo: {
               '@type': 'ImageObject',
-              url: 'https://www.moneymasterblog.site/logo.png'
+              url: getCanonicalUrl('/logo.png')
             }
           },
           mainEntityOfPage: {
             '@type': 'WebPage',
-            '@id': `https://www.moneymasterblog.site/#blog/${article.slug}`
+            '@id': getCanonicalUrl(getBloggerPostPath(article))
           }
         },
         {
@@ -132,7 +133,7 @@ export default function BlogArticlePage({
   }, [article]);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(getCanonicalUrl(getBloggerPostPath(article)));
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
@@ -149,21 +150,33 @@ export default function BlogArticlePage({
       <nav aria-label="Breadcrumb" className="pt-2">
         <ol className="flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
           <li>
-            <button
-              onClick={() => onNavigate('home')}
+            <a
+              href={PAGE_PATHS.home}
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onNavigate('home');
+                }
+              }}
               className="hover:text-neutral-900 transition-colors cursor-pointer"
             >
               Home
-            </button>
+            </a>
           </li>
           <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
           <li>
-            <button
-              onClick={() => onNavigate('blog')}
+            <a
+              href={PAGE_PATHS.blog}
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onNavigate('blog');
+                }
+              }}
               className="hover:text-neutral-900 transition-colors cursor-pointer"
             >
               Practical Guides & Blog
-            </button>
+            </a>
           </li>
           <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
           <li className="font-semibold text-neutral-900 truncate max-w-xs sm:max-w-md">
@@ -669,8 +682,14 @@ export default function BlogArticlePage({
       <section id="article-pagination" className="max-w-4xl pt-8 border-t border-neutral-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {prevArticle ? (
-            <button
-              onClick={() => onSelectArticle(prevArticle.slug)}
+            <a
+              href={getBloggerPostPath(prevArticle)}
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onSelectArticle(prevArticle.slug);
+                }
+              }}
               className="p-4 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-2xs transition-all text-left flex flex-col justify-between cursor-pointer group"
             >
               <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-500 mb-1 group-hover:text-neutral-900">
@@ -680,14 +699,20 @@ export default function BlogArticlePage({
               <h4 className="text-sm font-bold text-neutral-900 line-clamp-2">
                 {prevArticle.title}
               </h4>
-            </button>
+            </a>
           ) : (
             <div></div>
           )}
 
           {nextArticle ? (
-            <button
-              onClick={() => onSelectArticle(nextArticle.slug)}
+            <a
+              href={getBloggerPostPath(nextArticle)}
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onSelectArticle(nextArticle.slug);
+                }
+              }}
               className="p-4 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-2xs transition-all text-right flex flex-col justify-between cursor-pointer group sm:col-start-2"
             >
               <div className="flex items-center justify-end gap-1.5 text-xs font-semibold text-neutral-500 mb-1 group-hover:text-neutral-900">
@@ -697,7 +722,7 @@ export default function BlogArticlePage({
               <h4 className="text-sm font-bold text-neutral-900 line-clamp-2">
                 {nextArticle.title}
               </h4>
-            </button>
+            </a>
           ) : (
             <div></div>
           )}
@@ -715,23 +740,35 @@ export default function BlogArticlePage({
               Explore more actionable guides in {article.category} and related productivity topics.
             </p>
           </div>
-          <button
-            onClick={() => onNavigate('blog')}
+          <a
+            href={PAGE_PATHS.blog}
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                e.preventDefault();
+                onNavigate('blog');
+              }
+            }}
             className="text-xs font-bold text-neutral-900 hover:underline cursor-pointer hidden sm:inline-flex items-center gap-1"
           >
             <span>View All {BLOG_ARTICLES.length} Guides</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {relatedArticles.map(rel => {
             const relStyle = CATEGORY_STYLES[rel.category];
             return (
-              <div
+              <a
                 key={rel.id}
-                onClick={() => onSelectArticle(rel.slug)}
-                className="p-5 rounded-xl bg-white border border-neutral-200 hover:border-neutral-300 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer group"
+                href={getBloggerPostPath(rel)}
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                    e.preventDefault();
+                    onSelectArticle(rel.slug);
+                  }
+                }}
+                className="p-5 rounded-xl bg-white border border-neutral-200 hover:border-neutral-300 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer group text-left block"
               >
                 <div className="space-y-2.5">
                   <span
@@ -754,7 +791,7 @@ export default function BlogArticlePage({
                     <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
-              </div>
+              </a>
             );
           })}
         </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { PageId } from '../types';
+import { PAGE_PATHS } from '../utils/routes';
 
 interface HeaderProps {
   currentPage: PageId;
@@ -52,9 +53,15 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Left: Uploaded Logo + Brand */}
-          <button
+          <a
             id="nav-logo"
-            onClick={() => handleNavClick('home')}
+            href={PAGE_PATHS.home}
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                e.preventDefault();
+                handleNavClick('home');
+              }
+            }}
             className="flex items-center gap-2.5 sm:gap-3.5 text-left group cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-lg p-1 -ml-1 shrink-0"
             aria-label="Money Master Blog – Return to Homepage"
           >
@@ -74,7 +81,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 Online Tools & Utilities
               </span>
             </div>
-          </button>
+          </a>
 
           {/* Desktop Navigation: [Logo] | Home | Tools | About Us | Contact Us | Privacy Policy | Terms & Conditions | Disclaimer */}
           <div className="hidden lg:flex items-center gap-1.5 xl:gap-2">
@@ -84,11 +91,18 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 const isActive =
                   currentPage === item.id ||
                   (item.id === 'blog' && currentPage === 'blog-article');
+                const href = PAGE_PATHS[item.id] || '/';
                 return (
-                  <button
+                  <a
                     key={item.id}
                     id={`nav-link-${item.id}`}
-                    onClick={() => handleNavClick(item.id)}
+                    href={href}
+                    onClick={(e) => {
+                      if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                        e.preventDefault();
+                        handleNavClick(item.id);
+                      }
+                    }}
                     className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors cursor-pointer min-h-[38px] flex items-center whitespace-nowrap ${
                       isActive
                         ? 'bg-neutral-900 text-white font-semibold shadow-xs'
@@ -96,7 +110,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     }`}
                   >
                     {item.label}
-                  </button>
+                  </a>
                 );
               })}
             </nav>
@@ -144,11 +158,18 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
               const isActive =
                 currentPage === item.id ||
                 (item.id === 'blog' && currentPage === 'blog-article');
+              const href = PAGE_PATHS[item.id] || '/';
               return (
-                <button
+                <a
                   key={item.id}
                   id={`mobile-nav-${item.id}`}
-                  onClick={() => handleNavClick(item.id)}
+                  href={href}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                      e.preventDefault();
+                      handleNavClick(item.id);
+                    }
+                  }}
                   className={`w-full text-left px-4 py-3.5 rounded-lg text-base font-medium transition-colors cursor-pointer min-h-[48px] flex items-center justify-between ${
                     isActive
                       ? 'bg-neutral-100 text-neutral-900 font-bold'
@@ -157,17 +178,23 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 >
                   <span>{item.label}</span>
                   {isActive && <span className="w-2 h-2 rounded-full bg-neutral-900"></span>}
-                </button>
+                </a>
               );
             })}
 
             <div className="pt-4 mt-2 border-t border-neutral-100">
-              <button
-                onClick={() => handleNavClick('tools')}
-                className="w-full py-3 px-4 rounded-lg bg-neutral-900 text-white font-medium text-center text-sm shadow-xs min-h-[44px] cursor-pointer"
+              <a
+                href={PAGE_PATHS.tools}
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                    e.preventDefault();
+                    handleNavClick('tools');
+                  }
+                }}
+                className="block w-full py-3 px-4 rounded-lg bg-neutral-900 text-white font-medium text-center text-sm shadow-xs min-h-[44px] cursor-pointer"
               >
                 Browse All 15 Online Tools
-              </button>
+              </a>
             </div>
           </div>
         </div>

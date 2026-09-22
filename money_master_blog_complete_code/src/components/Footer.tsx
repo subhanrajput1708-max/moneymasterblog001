@@ -1,6 +1,7 @@
 import React from 'react';
-import { Wrench, Shield, CheckCircle2, UserCheck, Heart } from 'lucide-react';
+import { Wrench, Shield, CheckCircle2, UserCheck, Heart, Phone, Mail } from 'lucide-react';
 import { PageId } from '../types';
+import { PAGE_PATHS } from '../utils/routes';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -10,6 +11,13 @@ export default function Footer({ onNavigate }: FooterProps) {
   const handleNav = (page: PageId) => {
     onNavigate(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const createNavClickHandler = (page: PageId) => (e: React.MouseEvent) => {
+    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
+      handleNav(page);
+    }
   };
 
   return (
@@ -34,13 +42,15 @@ export default function Footer({ onNavigate }: FooterProps) {
               Money Master Blog provides simple, practical browser-based tools for working with text, colors, and everyday digital content. Fast, lightweight, and executed directly in your browser.
             </p>
 
-            <div className="pt-2 border-t border-neutral-800">
+            <div className="pt-2 border-t border-neutral-800 space-y-2">
               <div className="flex items-start gap-2.5 text-xs text-neutral-400">
                 <UserCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-neutral-200 font-medium">Curated & Written by Shahid Ali</span>
+                  <span className="text-neutral-200 font-medium">Curated by Shahid Ali & Subhan Ali</span>
                   <p className="text-neutral-400 mt-0.5">
-                    7 years of practical experience working with online tools, digital content, web utilities, and everyday digital workflows.
+                    Direct Support: <a href="tel:03678799545" className="text-neutral-300 hover:text-white underline">03678799545</a> (Calls & WhatsApp)
+                    <br />
+                    Gmail: <a href="mailto:subhanrajput1708@gmail.com" className="text-neutral-300 hover:text-white underline">subhanrajput1708@gmail.com</a>
                   </p>
                 </div>
               </div>
@@ -54,36 +64,40 @@ export default function Footer({ onNavigate }: FooterProps) {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <button
-                  onClick={() => handleNav('tools')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.tools}
+                  onClick={createNavClickHandler('tools')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Color Palette Generator
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('tools')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.tools}
+                  onClick={createNavClickHandler('tools')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Word Counter & Case
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('tools')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.tools}
+                  onClick={createNavClickHandler('tools')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Random Password Tool
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('tools')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.tools}
+                  onClick={createNavClickHandler('tools')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Placeholder Text Generator
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -95,44 +109,49 @@ export default function Footer({ onNavigate }: FooterProps) {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <button
-                  onClick={() => handleNav('home')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.home}
+                  onClick={createNavClickHandler('home')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Home
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('tools')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.tools}
+                  onClick={createNavClickHandler('tools')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   All Tools Directory
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('blog')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.blog}
+                  onClick={createNavClickHandler('blog')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Practical Guides & Blog
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('about')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.about}
+                  onClick={createNavClickHandler('about')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   About Us & Author
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('contact')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.contact}
+                  onClick={createNavClickHandler('contact')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Contact & Feedback
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -144,28 +163,31 @@ export default function Footer({ onNavigate }: FooterProps) {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <button
-                  onClick={() => handleNav('privacy')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.privacy}
+                  onClick={createNavClickHandler('privacy')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Privacy Policy
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('terms')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.terms}
+                  onClick={createNavClickHandler('terms')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Terms & Conditions
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleNav('disclaimer')}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                <a
+                  href={PAGE_PATHS.disclaimer}
+                  onClick={createNavClickHandler('disclaimer')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
                 >
                   Website Disclaimer
-                </button>
+                </a>
               </li>
             </ul>
 

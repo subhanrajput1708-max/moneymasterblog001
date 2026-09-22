@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { BlogArticle, BlogCategory, PageId, ToolId } from '../../types';
 import { BLOG_ARTICLES, BLOG_CATEGORIES, searchArticles } from '../../data/blogArticles';
+import { getBloggerPostPath } from '../../utils/routes';
 
 interface BlogPageProps {
   onNavigate: (page: PageId) => void;
@@ -231,12 +232,18 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
 
                     {/* Title */}
                     <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug tracking-tight group-hover:text-neutral-700 transition-colors">
-                      <button
-                        onClick={() => onSelectArticle(article.slug)}
-                        className="text-left cursor-pointer hover:underline"
+                      <a
+                        href={getBloggerPostPath(article)}
+                        onClick={(e) => {
+                          if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                            e.preventDefault();
+                            onSelectArticle(article.slug);
+                          }
+                        }}
+                        className="text-left cursor-pointer hover:underline block"
                       >
                         {article.title}
-                      </button>
+                      </a>
                     </h2>
 
                     {/* Excerpt */}
@@ -262,13 +269,19 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                       <span>{article.publishedDate}</span>
                     </div>
 
-                    <button
-                      onClick={() => onSelectArticle(article.slug)}
+                    <a
+                      href={getBloggerPostPath(article)}
+                      onClick={(e) => {
+                        if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                          e.preventDefault();
+                          onSelectArticle(article.slug);
+                        }
+                      }}
                       className="inline-flex items-center gap-1.5 font-bold text-neutral-900 hover:text-emerald-700 transition-colors cursor-pointer group-hover:translate-x-0.5 transform duration-150"
                     >
                       <span>Read Guide</span>
                       <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    </a>
                   </div>
                 </article>
               );

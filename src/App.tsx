@@ -17,6 +17,7 @@ import DisclaimerPage from './components/pages/DisclaimerPage';
 import BlogPage from './components/pages/BlogPage';
 import BlogArticlePage from './components/pages/BlogArticlePage';
 import { getArticleBySlug, BLOG_ARTICLES } from './data/blogArticles';
+import { parseCurrentRoute, PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from './utils/routes';
 
 interface PageSeoMeta {
   title: string;
@@ -72,66 +73,80 @@ const PAGE_SEO: Record<PageId, PageSeoMeta> = {
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<PageId>('home');
+  const initialRoute = parseCurrentRoute();
+  const [currentPage, setCurrentPage] = useState<PageId>(initialRoute.page);
   const [selectedTool, setSelectedTool] = useState<ToolId>('color-palette');
-  const [selectedArticleSlug, setSelectedArticleSlug] = useState<string | null>(null);
+  const [selectedArticleSlug, setSelectedArticleSlug] = useState<string | null>(initialRoute.articleSlug);
 
   const currentArticle = selectedArticleSlug ? getArticleBySlug(selectedArticleSlug) : null;
 
-  // Handle URL hash navigation if user uses browser back/forward buttons
+  // Handle URL navigation (both browser history popstate and hashchange)
   useEffect(() => {
-    const handleHashChange = () => {
-      const rawHash = window.location.hash.replace('#', '');
+    // If a user or legacy link lands with a hash like #tools or #blog/slug, convert URL cleanly without '#'
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.replace('#', '').trim();
+      if (hash) {
+        let cleanUrl = '/';
+        if (hash.startsWith('blog/') || hash.startsWith('article/')) {
+          const slug = hash.replace(/^(blog|article)\//, '');
+          const art = getArticleBySlug(slug);
+          if (art) {
+            cleanUrl = getBloggerPostPath(art);
+          }
+        } else if (hash === 'tools') {
+          cleanUrl = PAGE_PATHS.tools;
+        } else if (hash === 'blog') {
+          cleanUrl = PAGE_PATHS.blog;
+        } else if (hash === 'about') {
+          cleanUrl = PAGE_PATHS.about;
+        } else if (hash === 'contact') {
+          cleanUrl = PAGE_PATHS.contact;
+        } else if (hash === 'privacy') {
+          cleanUrl = PAGE_PATHS.privacy;
+        } else if (hash === 'terms') {
+          cleanUrl = PAGE_PATHS.terms;
+        } else if (hash === 'disclaimer') {
+          cleanUrl = PAGE_PATHS.disclaimer;
+        }
 
-      // Check article routes: #blog/slug or #article/slug
-      if (rawHash.startsWith('blog/') || rawHash.startsWith('article/')) {
-        const slug = rawHash.replace(/^(blog|article)\//, '');
-        const found = getArticleBySlug(slug);
-        if (found) {
-          setSelectedArticleSlug(found.slug);
-          setCurrentPage('blog-article');
-          return;
+        try {
+          window.history.replaceState({}, '', cleanUrl);
+        } catch {
+          // ignore in restricted environments
         }
       }
+    }
 
-      const validPages: PageId[] = [
-        'home',
-        'tools',
-        'blog',
-        'about',
-        'contact',
-        'privacy',
-        'terms',
-        'disclaimer',
-      ];
-      if (validPages.includes(rawHash as PageId)) {
-        setCurrentPage(rawHash as PageId);
-        if (rawHash !== 'blog-article') {
-          setSelectedArticleSlug(null);
-        }
-      }
+    const handleUrlChange = () => {
+      const route = parseCurrentRoute();
+      setCurrentPage(route.page);
+      setSelectedArticleSlug(route.articleSlug);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    // Initial check
-    if (window.location.hash) {
-      handleHashChange();
-    }
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
   }, []);
 
-  // Synchronize document title and meta description tag with current page
+  // Synchronize document title, meta description tag, and canonical link with current page
   useEffect(() => {
     let title = '';
     let description = '';
+    let canonicalPath = '/';
 
     if (currentPage === 'blog-article' && currentArticle) {
       title = `${currentArticle.title} – Money Master Blog`;
       description = currentArticle.metaDescription;
+      canonicalPath = getBloggerPostPath(currentArticle);
     } else {
       const seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
       title = seo.title;
       description = seo.description;
+      canonicalPath = PAGE_PATHS[currentPage] || '/';
     }
 
     document.title = title;
@@ -152,6 +167,14 @@ export default function App() {
     if (ogDesc) {
       ogDesc.setAttribute('content', description);
     }
+
+    let canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (!canonicalEl) {
+      canonicalEl = document.createElement('link');
+      canonicalEl.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalEl);
+    }
+    canonicalEl.setAttribute('href', getCanonicalUrl(canonicalPath));
   }, [currentPage, currentArticle]);
 
   const handleNavigate = (page: PageId) => {
@@ -159,14 +182,23 @@ export default function App() {
     if (page === 'blog') {
       setSelectedArticleSlug(null);
     }
-    window.location.hash = page === 'home' ? '' : `#${page}`;
+    const targetPath = PAGE_PATHS[page] || '/';
+    try {
+      window.history.pushState({}, '', targetPath);
+    } catch {
+      // ignore
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSelectTool = (tool: ToolId) => {
     setSelectedTool(tool);
     setCurrentPage('tools');
-    window.location.hash = '#tools';
+    try {
+      window.history.pushState({}, '', PAGE_PATHS.tools);
+    } catch {
+      // ignore
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -175,7 +207,12 @@ export default function App() {
     if (article) {
       setSelectedArticleSlug(article.slug);
       setCurrentPage('blog-article');
-      window.location.hash = `#blog/${article.slug}`;
+      const targetPath = getBloggerPostPath(article);
+      try {
+        window.history.pushState({}, '', targetPath);
+      } catch {
+        // ignore
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
