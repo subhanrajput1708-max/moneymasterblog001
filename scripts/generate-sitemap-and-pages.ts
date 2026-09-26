@@ -256,6 +256,12 @@ export function runGenerator() {
   fs.writeFileSync(publicRobotsPath, robotsTxtContent, 'utf-8');
   console.log(`✅ Verified robots.txt in ${publicRobotsPath}`);
 
+  // Write ads.txt to public
+  const adsTxtContent = 'google.com, pub-8888653949280512, DIRECT, f08c47fec0942fa0\n';
+  const publicAdsPath = path.join(publicDir, 'ads.txt');
+  fs.writeFileSync(publicAdsPath, adsTxtContent, 'utf-8');
+  console.log(`✅ Verified ads.txt in ${publicAdsPath}`);
+
   // 2. If dist/ exists, write files to dist/
   if (fs.existsSync(distDir)) {
     const distSitemapPath = path.join(distDir, 'sitemap.xml');
@@ -266,6 +272,9 @@ export function runGenerator() {
 
     const distRobotsPath = path.join(distDir, 'robots.txt');
     fs.writeFileSync(distRobotsPath, robotsTxtContent, 'utf-8');
+
+    const distAdsPath = path.join(distDir, 'ads.txt');
+    fs.writeFileSync(distAdsPath, adsTxtContent, 'utf-8');
 
     const distIndexPath = path.join(distDir, 'index.html');
     if (fs.existsSync(distIndexPath)) {

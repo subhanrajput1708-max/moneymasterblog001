@@ -93,10 +93,12 @@ Production assets are generated in the `dist/` directory.
 
 ---
 
-## 🗺️ Sitemap & Search Engine Optimization
+## 🗺️ Sitemap, Ads & Search Engine Optimization
 
 - **Sitemap Location**: `public/sitemap.xml` (deployed to `https://www.moneymasterblog.site/sitemap.xml`)
 - **Robots.txt Location**: `public/robots.txt` (deployed to `https://www.moneymasterblog.site/robots.txt`)
+- **Ads.txt Location**: `public/ads.txt` (deployed to `https://www.moneymasterblog.site/ads.txt`)
+  - Content: `google.com, pub-8888653949280512, DIRECT, f08c47fec0942fa0`
 - **Format**: Valid `sitemaps.org` XML (`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`)
 - **Total Indexable URLs**: 28 canonical URLs (8 standalone pages + 20 practical guides)
 - **Hash-Free Routing**: Zero `#` hash URLs exist in the sitemap or website routing. All URLs are clean, canonical paths:
