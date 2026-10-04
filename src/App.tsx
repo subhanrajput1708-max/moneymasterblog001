@@ -14,6 +14,7 @@ import ContactUsPage from './components/pages/ContactUsPage';
 import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
 import TermsPage from './components/pages/TermsPage';
 import DisclaimerPage from './components/pages/DisclaimerPage';
+import EditorialPolicyPage from './components/pages/EditorialPolicyPage';
 import BlogPage from './components/pages/BlogPage';
 import BlogArticlePage from './components/pages/BlogArticlePage';
 import { getArticleBySlug, BLOG_ARTICLES } from './data/blogArticles';
@@ -70,6 +71,11 @@ const PAGE_SEO: Record<PageId, PageSeoMeta> = {
     title: 'Website Disclaimer – Money Master Blog',
     description:
       'Read the Money Master Blog Disclaimer regarding tool accuracy, monitor color calibration, text tokenization differences, and productivity use.',
+  },
+  'editorial-policy': {
+    title: 'Editorial Policy & Content Quality Standards – Money Master Blog',
+    description:
+      'Read the Money Master Blog Editorial Policy, mathematical verification standards, ongoing curation schedules, and fact-checking protocols by Shahid Ali.',
   },
 };
 
@@ -303,6 +309,9 @@ export default function App() {
         )}
         {currentPage === 'disclaimer' && (
           <DisclaimerPage onNavigate={handleNavigate} />
+        )}
+        {currentPage === 'editorial-policy' && (
+          <EditorialPolicyPage onNavigate={handleNavigate} />
         )}
       </main>
 

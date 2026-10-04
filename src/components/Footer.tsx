@@ -221,6 +221,15 @@ export default function Footer({ onNavigate }: FooterProps) {
               </li>
               <li>
                 <a
+                  href={PAGE_PATHS['editorial-policy']}
+                  onClick={createNavClickHandler('editorial-policy')}
+                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"
+                >
+                  Editorial Policy
+                </a>
+              </li>
+              <li>
+                <a
                   href={PAGE_PATHS.disclaimer}
                   onClick={createNavClickHandler('disclaimer')}
                   className="text-neutral-400 hover:text-white transition-colors cursor-pointer text-left block"

@@ -103,6 +103,15 @@ const CORE_PAGES: CorePageDef[] = [
     description: 'Read the Money Master Blog Disclaimer regarding tool accuracy, educational calculations, financial estimates, and productivity use.',
     alternatePaths: ['/disclaimer/index.html', '/disclaimer.html'],
   },
+  {
+    id: 'editorial-policy',
+    path: '/p/editorial-policy.html',
+    priority: '0.8',
+    changefreq: 'monthly',
+    title: 'Editorial Policy & Content Quality Standards – Money Master Blog',
+    description: 'Read the Money Master Blog Editorial Policy, mathematical verification standards, ongoing curation schedules, and fact-checking protocols by Shahid Ali.',
+    alternatePaths: ['/editorial-policy/index.html', '/editorial-policy.html'],
+  },
 ];
 
 function formatDateToIso(dateStr: string): string {
@@ -249,6 +258,7 @@ function renderFooter(): string {
         <h4 style="color: #ffffff; font-weight: 700; font-size: 15px; margin-bottom: 14px;">Trust &amp; Transparency</h4>
         <ul style="list-style: none; padding: 0; margin: 0; line-height: 2; font-size: 13px;">
           <li><a href="/p/about-us.html" style="color: #9ca3af; text-decoration: none;">About Shahid Ali</a></li>
+          <li><a href="/p/editorial-policy.html" style="color: #9ca3af; text-decoration: none;">Editorial Policy &amp; Standards</a></li>
           <li><a href="/p/contact-us.html" style="color: #9ca3af; text-decoration: none;">Contact Us</a></li>
           <li><a href="/p/privacy-policy.html" style="color: #9ca3af; text-decoration: none;">Privacy Policy</a></li>
           <li><a href="/p/terms-conditions.html" style="color: #9ca3af; text-decoration: none;">Terms &amp; Conditions</a></li>
@@ -1161,6 +1171,68 @@ function renderContactPageBody(): string {
   ${renderFooter()}`;
 }
 
+function renderEditorialPolicyPageBody(): string {
+  return `
+  ${renderHeader()}
+  ${renderBreadcrumbNav([{ name: 'Home', url: '/' }, { name: 'Editorial Policy & Standards' }])}
+  <main style="max-width: 900px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
+    <header style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+      <div style="display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; background: #ecfdf5; color: #047857; padding: 4px 12px; border-radius: 9999px; margin-bottom: 12px; border: 1px solid #a7f3d0;">
+        Editorial Integrity &amp; Quality Standards
+      </div>
+      <h1 style="font-size: 34px; font-weight: 800; color: #111827; margin: 0 0 12px 0;">Editorial Policy &amp; Content Quality Standards</h1>
+      <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px 0;">
+        Money Master Blog adheres to strict editorial standards, mathematical verification protocols, and ongoing maintenance schedules to deliver trustworthy personal finance education and reliable browser tools.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #4b5563;">
+        <span><strong>Author &amp; Curator:</strong> Shahid Ali (7+ Years Experience)</span>
+        <span>•</span>
+        <span><strong>Audit Schedule:</strong> Quarterly 2026 Reviews</span>
+        <span>•</span>
+        <span><strong>Architecture:</strong> 100% Client-Side Private Logic</span>
+      </div>
+    </header>
+
+    <div style="font-size: 15px; color: #374151;">
+      <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 12px 0;">1. Authentic, High-Quality Research &amp; Original Substance</h2>
+        <p style="margin-bottom: 14px;">Every article on Money Master Blog provides in-depth, original research focused on real consumer financial decisions—including loan amortization, APR fee breakdowns, high-yield savings evaluation, and debt payoff strategies. We never rely on automated generic summaries or affiliate-driven rankings.</p>
+        <p style="margin: 0;">Each guide is structured with clear definitions, actionable decision frameworks, and realistic numerical calculations that readers can verify independently.</p>
+      </section>
+
+      <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 12px 0;">2. Mathematical Verification &amp; Deterministic Logic</h2>
+        <p style="margin-bottom: 14px;">All financial formulas (compound interest, monthly loan payments, GST, percentage change, and opportunity cost models) follow standard mathematical conventions and Truth in Lending Act principles. Calculators are tested against standard financial equations to ensure exact decimal precision.</p>
+        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px; font-family: monospace; font-size: 13px; color: #111827;">
+          Standard Monthly Amortization: M = P * [r(1+r)^n] / [(1+r)^n - 1]
+        </div>
+      </section>
+
+      <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 12px 0;">3. Client-Side Tool Architecture &amp; Zero Server Tracking</h2>
+        <p style="margin-bottom: 14px;">Our 25 online calculators and utilities execute strictly inside the visitor&apos;s web browser. No user-entered financial figures, document text, or images are transmitted to external servers or stored in remote databases. This guarantees privacy and zero risk of personal financial data leaks.</p>
+      </section>
+
+      <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 12px 0;">4. Ongoing Curation &amp; Structural Maintenance Schedule</h2>
+        <p style="margin-bottom: 14px;">We maintain our infrastructure through continuous quarterly auditing overseen by Shahid Ali:</p>
+        <ul style="padding-left: 20px; margin: 0 0 14px 0; line-height: 1.8;">
+          <li><strong>Q1 2026 Audit:</strong> Loan interest rate benchmarks and fee disclosure clauses re-examined against current banking disclosures.</li>
+          <li><strong>Q2 2026 Audit:</strong> 25 online tools stress-tested for full responsiveness across Chromium, WebKit, and mobile browsers.</li>
+          <li><strong>Q3 2026 Audit:</strong> Savings and inflation models updated for contemporary economic conditions.</li>
+          <li><strong>Q4 2026 Audit:</strong> Full site link validation, XML sitemap verification, and zero dead URLs enforcement.</li>
+        </ul>
+      </section>
+
+      <section style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 12px 0;">5. Errata &amp; Reader Feedback</h2>
+        <p style="margin-bottom: 14px;">We welcome reader feedback and prompt error corrections. If you detect any inaccuracy, please email us directly at <a href="mailto:contact@moneymasterblog.site" style="color: #2563eb; font-weight: 600;">contact@moneymasterblog.site</a> or reach out through our <a href="/p/contact-us.html" style="color: #2563eb; font-weight: 600;">Contact Us page</a>. Corrections are reviewed within 24 to 48 hours.</p>
+      </section>
+    </div>
+  </main>
+  ${renderFooter()}`;
+}
+
 function renderLegalPageBody(title: string, description: string, bodyText: string): string {
   return `
   ${renderHeader()}
@@ -1368,6 +1440,9 @@ export function runGenerator() {
             'Informational purposes, tool accuracy, and productivity utility.',
             `<p>The tools and guides on Money Master Blog are provided for practical digital utility on an "as-is" basis. Calculations and financial figures serve educational estimation purposes.</p>`
           );
+        } else if (page.id === 'editorial-policy') {
+          bodyContent = renderEditorialPolicyPageBody();
+          pageType = 'AboutPage';
         }
 
         const breadcrumbs = [

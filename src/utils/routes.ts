@@ -12,6 +12,7 @@ export const PAGE_PATHS: Record<PageId, string> = {
   privacy: '/p/privacy-policy.html',
   terms: '/p/terms-conditions.html',
   disclaimer: '/p/disclaimer.html',
+  'editorial-policy': '/p/editorial-policy.html',
 };
 
 /**
@@ -94,6 +95,9 @@ export function parseCurrentRoute(
   if (cleanPath.includes('/p/disclaimer.html') || cleanPath === '/disclaimer') {
     return { page: 'disclaimer', articleSlug: null, toolId: null };
   }
+  if (cleanPath.includes('/p/editorial-policy.html') || cleanPath === '/editorial-policy') {
+    return { page: 'editorial-policy', articleSlug: null, toolId: null };
+  }
   if (cleanPath.includes('/p/blog-page.html') || cleanPath.includes('/p/blog.html') || cleanPath === '/blog') {
     return { page: 'blog', articleSlug: null, toolId: null };
   }
@@ -120,6 +124,7 @@ export function parseCurrentRoute(
       'privacy',
       'terms',
       'disclaimer',
+      'editorial-policy',
     ];
     if (validPages.includes(hash as PageId)) {
       return { page: hash as PageId, articleSlug: null, toolId: paramTool };

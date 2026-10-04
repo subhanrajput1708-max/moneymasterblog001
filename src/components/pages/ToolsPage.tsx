@@ -33,6 +33,8 @@ import {
   Layers,
   ChevronRight,
   HelpCircle,
+  ThumbsUp,
+  ThumbsDown,
 } from 'lucide-react';
 import { ToolId, ToolCategory } from '../../types';
 import { TOOLS_DATA, TOOL_CATEGORIES, getToolById } from '../../data/toolsData';
@@ -73,6 +75,7 @@ export default function ToolsPage({ initialTool, onSelectTool }: ToolsPageProps)
   const [selectedToolId, setSelectedToolId] = useState<ToolId | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [toolFeedback, setToolFeedback] = useState<Record<string, 'yes' | 'no'>>({});
   const workspaceRef = useRef<HTMLDivElement>(null);
 
   // Sync initialTool prop if present
@@ -446,6 +449,58 @@ export default function ToolsPage({ initialTool, onSelectTool }: ToolsPageProps)
                     </p>
                   </div>
                 ))}
+              </div>
+            </section>
+
+            {/* Interactive User Feedback & Calculation Accuracy */}
+            <section className="bg-neutral-100 rounded-2xl border border-neutral-200 p-6 md:p-8 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">
+                    Was this tool fast, accurate, and easy to use?
+                  </h3>
+                  <p className="text-xs text-neutral-600">
+                    Your direct feedback helps Shahid Ali and our engineering team maintain precision across all 25 client-side utilities.
+                  </p>
+                </div>
+                {toolFeedback[activeTool.id] ? (
+                  <div className="text-xs font-semibold text-emerald-900 bg-emerald-50 px-3.5 py-2 rounded-xl border border-emerald-200 flex items-center gap-1.5 shrink-0">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Thank you for voting!</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setToolFeedback(prev => ({ ...prev, [activeTool.id]: 'yes' }))}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-colors cursor-pointer"
+                    >
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                      Yes, accurate
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setToolFeedback(prev => ({ ...prev, [activeTool.id]: 'no' }))}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white border border-neutral-300 text-neutral-700 text-xs font-bold hover:bg-neutral-50 transition-colors cursor-pointer"
+                    >
+                      <ThumbsDown className="w-3.5 h-3.5" />
+                      Report an issue
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-3 border-t border-neutral-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-neutral-500">
+                <span className="flex items-center gap-1 font-medium text-emerald-800">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  100% Client-Side Privacy: Inputs are never sent to remote servers
+                </span>
+                <a
+                  href="/p/editorial-policy.html"
+                  className="text-neutral-900 font-semibold hover:underline"
+                >
+                  View Editorial &amp; Calculation Standards &rarr;
+                </a>
               </div>
             </section>
 

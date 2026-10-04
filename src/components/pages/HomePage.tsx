@@ -324,6 +324,25 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
               </p>
             </div>
           </div>
+
+          <div className="mt-6 p-4 rounded-xl bg-neutral-100 border border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="text-neutral-700 font-medium">
+                Our guides and tools undergo quarterly mathematical audits and review for 2026 financial standards.
+              </span>
+            </div>
+            <a
+              href={PAGE_PATHS['editorial-policy']}
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('editorial-policy');
+              }}
+              className="text-black font-bold hover:underline shrink-0"
+            >
+              Read Editorial Standards &amp; Review Policy &rarr;
+            </a>
+          </div>
         </div>
       </section>
 

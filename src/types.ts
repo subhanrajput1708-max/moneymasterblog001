@@ -7,7 +7,8 @@ export type PageId =
   | 'contact'
   | 'privacy'
   | 'terms'
-  | 'disclaimer';
+  | 'disclaimer'
+  | 'editorial-policy';
 
 export type BlogCategory =
   | 'Personal Loans'
