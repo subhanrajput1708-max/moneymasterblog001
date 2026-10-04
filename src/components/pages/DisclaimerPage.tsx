@@ -45,7 +45,7 @@ export default function DisclaimerPage({ onNavigate }: DisclaimerPageProps) {
     {
       question: 'Does Money Master Blog provide certified legal, financial, or investment advice?',
       answer:
-        'No. Despite the name "Money Master Blog" (derived from our editorial heritage of personal productivity, efficiency, and resource stewardship), this platform operates strictly as a suite of digital productivity utilities and practical workflow guides. None of the tools, guides, formulas, or articles constitute licensed legal counsel, financial advice, tax planning, or official cybersecurity audit reports.',
+        'No. Money Master Blog provides practical personal finance guides and browser-based calculators for educational and informational planning purposes only. None of the articles, tools, calculations, or explanations constitute certified financial advice, investment advisory services, legal counsel, loan underwriting, or official tax preparation. Because individual credit profiles, statutory tax laws, and lender terms vary widely, readers should always verify loan agreements and important financial decisions directly with authorized providers or licensed financial advisors.',
     },
     {
       question: 'Does the Color Palette Generator provide official WCAG 2.1 AA/AAA compliance certification?',
@@ -65,7 +65,7 @@ export default function DisclaimerPage({ onNavigate }: DisclaimerPageProps) {
     {
       question: 'Are there any hidden API calls or server logs capturing my sensitive input text?',
       answer:
-        'No. All 15 tools operate 100% client-side inside your local browser memory using JavaScript and HTML5. Your text, passwords, datasets, and code snippets are never transmitted to our web server or third-party cloud storage. Once you close or refresh the browser tab, memory is cleared by your browser engine.',
+        'No. All 25 tools operate client-side inside your local browser memory using JavaScript and HTML5. Your text, passwords, datasets, and calculations are processed directly in your browser. Once you close or refresh the browser tab, memory is cleared by your browser engine.',
     },
     {
       question: 'What is the procedure for reporting an algorithmic discrepancy or suggesting a correction?',

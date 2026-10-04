@@ -66,7 +66,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             aria-label="Money Master Blog – Return to Homepage"
           >
             <img
-              src="./logo.png"
+              src="/logo.png"
               alt="Money Master Blog Logo"
               className="h-10 w-10 sm:h-12 sm:w-12 aspect-square object-contain rounded-md border border-neutral-200/90 bg-white p-0.5 shadow-xs group-hover:border-neutral-400 transition-colors"
               referrerPolicy="no-referrer"
@@ -140,8 +140,8 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             <div className="pb-3 border-b border-neutral-100 mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <img
-                  src="./logo.png"
-                  alt="Money Master Blog"
+                  src="/logo.png"
+                  alt="Money Master Blog Logo"
                   className="h-7 w-7 aspect-square object-contain rounded bg-white"
                   referrerPolicy="no-referrer"
                   width="28"

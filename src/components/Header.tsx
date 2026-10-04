@@ -35,11 +35,8 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     { id: 'home', label: 'Home' },
     { id: 'tools', label: 'Tools' },
     { id: 'blog', label: 'Blog' },
-    { id: 'about', label: 'About Us' },
-    { id: 'contact', label: 'Contact Us' },
-    { id: 'privacy', label: 'Privacy Policy' },
-    { id: 'terms', label: 'Terms & Conditions' },
-    { id: 'disclaimer', label: 'Disclaimer' },
+    { id: 'about', label: 'About' },
+    { id: 'contact', label: 'Contact' },
   ];
 
   const handleNavClick = (page: PageId) => {
@@ -49,10 +46,10 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-2xs">
+    <header className="sticky top-0 z-50 bg-white border-b border-neutral-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Left: Uploaded Logo + Brand */}
+          {/* Left: Logo + Brand Name */}
           <a
             id="nav-logo"
             href={PAGE_PATHS.home}
@@ -62,68 +59,64 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 handleNavClick('home');
               }
             }}
-            className="flex items-center gap-2.5 sm:gap-3.5 text-left group cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-lg p-1 -ml-1 shrink-0"
+            className="flex items-center gap-3 text-left group cursor-pointer focus:outline-hidden rounded-lg shrink-0"
             aria-label="Money Master Blog – Return to Homepage"
           >
             <img
-              src="./logo.png"
+              src="/logo.png"
               alt="Money Master Blog Logo"
-              className="h-10 w-10 sm:h-12 sm:w-12 aspect-square object-contain rounded-md border border-neutral-200/90 bg-white p-0.5 shadow-xs group-hover:border-neutral-400 transition-colors"
+              className="h-9 w-9 sm:h-11 sm:w-11 object-contain rounded-lg border border-neutral-200 bg-white p-0.5"
               referrerPolicy="no-referrer"
-              width="48"
-              height="48"
+              width="44"
+              height="44"
             />
             <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold text-neutral-900 tracking-tight leading-tight group-hover:text-neutral-700 transition-colors">
+              <span className="text-lg sm:text-xl font-extrabold text-black tracking-tight leading-tight">
                 Money Master Blog
               </span>
-              <span className="text-[10px] sm:text-[11px] text-neutral-500 font-medium hidden sm:inline leading-none mt-0.5">
-                Online Tools & Utilities
+              <span className="text-[11px] text-neutral-500 font-medium hidden sm:inline leading-none mt-0.5">
+                Practical Money Guides &amp; Tools
               </span>
             </div>
           </a>
 
-          {/* Desktop Navigation: [Logo] | Home | Tools | About Us | Contact Us | Privacy Policy | Terms & Conditions | Disclaimer */}
-          <div className="hidden lg:flex items-center gap-1.5 xl:gap-2">
-            <div className="h-6 w-px bg-neutral-200 mx-1.5" aria-hidden="true" />
-            <nav className="flex items-center space-x-1" aria-label="Main Navigation">
-              {navItems.map((item) => {
-                const isActive =
-                  currentPage === item.id ||
-                  (item.id === 'blog' && currentPage === 'blog-article');
-                const href = PAGE_PATHS[item.id] || '/';
-                return (
-                  <a
-                    key={item.id}
-                    id={`nav-link-${item.id}`}
-                    href={href}
-                    onClick={(e) => {
-                      if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-                        e.preventDefault();
-                        handleNavClick(item.id);
-                      }
-                    }}
-                    className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors cursor-pointer min-h-[38px] flex items-center whitespace-nowrap ${
-                      isActive
-                        ? 'bg-neutral-900 text-white font-semibold shadow-xs'
-                        : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                );
-              })}
-            </nav>
-          </div>
+          {/* Desktop Navigation: Simple Black & White Minimalist Links */}
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2" aria-label="Main Navigation">
+            {navItems.map((item) => {
+              const isActive =
+                currentPage === item.id ||
+                (item.id === 'blog' && currentPage === 'blog-article');
+              const href = PAGE_PATHS[item.id] || '/';
+              return (
+                <a
+                  key={item.id}
+                  id={`nav-link-${item.id}`}
+                  href={href}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                      e.preventDefault();
+                      handleNavClick(item.id);
+                    }
+                  }}
+                  className={`px-3.5 py-2 text-sm transition-colors cursor-pointer rounded-md ${
+                    isActive
+                      ? 'text-black font-bold bg-neutral-100'
+                      : 'text-neutral-700 hover:text-black hover:bg-neutral-50 font-medium'
+                  }`}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
+          </nav>
 
-          {/* Right Header Controls / Mobile Hamburger Button */}
-          <div className="flex items-center gap-2">
-            {/* Mobile Menu Button: [Uploaded Logo] ☰ */}
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center">
             <button
               id="btn-mobile-menu-toggle"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden inline-flex items-center justify-center p-2.5 rounded-lg text-neutral-800 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-neutral-900 cursor-pointer min-h-[44px] min-w-[44px]"
+              className="inline-flex items-center justify-center p-2 rounded-lg text-black hover:bg-neutral-100 focus:outline-hidden cursor-pointer"
               aria-expanded={mobileMenuOpen}
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             >
@@ -133,25 +126,15 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu Drawer Overlay */}
+      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-16 sm:top-20 z-50 bg-neutral-900/40 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white border-b border-neutral-200 shadow-xl max-h-[calc(100vh-4rem)] overflow-y-auto p-4 sm:p-6 space-y-1">
-            <div className="pb-3 border-b border-neutral-100 mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <img
-                  src="./logo.png"
-                  alt="Money Master Blog"
-                  className="h-7 w-7 aspect-square object-contain rounded bg-white"
-                  referrerPolicy="no-referrer"
-                  width="28"
-                  height="28"
-                />
-                <span className="text-xs font-bold text-neutral-800 uppercase tracking-wider">
-                  Navigation Menu
-                </span>
-              </div>
-              <span className="text-xs text-neutral-400">by Shahid Ali</span>
+        <div className="md:hidden fixed inset-0 top-16 sm:top-20 z-50 bg-black/40 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white border-b border-neutral-200 shadow-xl max-h-[calc(100vh-4rem)] overflow-y-auto p-4 space-y-1">
+            <div className="pb-3 border-b border-neutral-100 mb-2 flex items-center justify-between">
+              <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                Menu
+              </span>
+              <span className="text-xs text-neutral-400">Money Master Blog</span>
             </div>
 
             {navItems.map((item) => {
@@ -170,19 +153,19 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                       handleNavClick(item.id);
                     }
                   }}
-                  className={`w-full text-left px-4 py-3.5 rounded-lg text-base font-medium transition-colors cursor-pointer min-h-[48px] flex items-center justify-between ${
+                  className={`w-full text-left px-4 py-3 rounded-lg text-base transition-colors cursor-pointer flex items-center justify-between ${
                     isActive
-                      ? 'bg-neutral-100 text-neutral-900 font-bold'
-                      : 'text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900'
+                      ? 'bg-neutral-100 text-black font-bold'
+                      : 'text-neutral-800 hover:bg-neutral-50 hover:text-black font-medium'
                   }`}
                 >
                   <span>{item.label}</span>
-                  {isActive && <span className="w-2 h-2 rounded-full bg-neutral-900"></span>}
+                  {isActive && <span className="w-2 h-2 rounded-full bg-black"></span>}
                 </a>
               );
             })}
 
-            <div className="pt-4 mt-2 border-t border-neutral-100">
+            <div className="pt-3 mt-2 border-t border-neutral-100">
               <a
                 href={PAGE_PATHS.tools}
                 onClick={(e) => {
@@ -191,9 +174,9 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     handleNavClick('tools');
                   }
                 }}
-                className="block w-full py-3 px-4 rounded-lg bg-neutral-900 text-white font-medium text-center text-sm shadow-xs min-h-[44px] cursor-pointer"
+                className="block w-full py-2.5 px-4 rounded-lg bg-black text-white font-medium text-center text-sm cursor-pointer"
               >
-                Browse All 15 Online Tools
+                Explore 25 Online Tools
               </a>
             </div>
           </div>

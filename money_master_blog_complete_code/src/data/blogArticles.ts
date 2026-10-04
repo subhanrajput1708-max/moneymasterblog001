@@ -12,11 +12,11 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 ];
 
 export const BLOG_CATEGORIES: BlogCategory[] = [
-  'Text Cleaning',
-  'Productivity',
-  'Data Preparation',
-  'Online Work',
-  'Digital Organization'
+  'Personal Loans',
+  'Credit & Debt',
+  'Savings & Budgeting',
+  'Insurance & Auto',
+  'Retirement & Goals'
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {

@@ -25,6 +25,7 @@ import { BLOG_ARTICLES, getRelatedArticles } from '../../data/blogArticles';
 import { CATEGORY_STYLES } from './BlogPage';
 import FaqSection from '../common/FaqSection';
 import { PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from '../../utils/routes';
+import { getToolById } from '../../data/toolsData';
 
 interface BlogArticlePageProps {
   article: BlogArticle;
@@ -32,24 +33,6 @@ interface BlogArticlePageProps {
   onSelectArticle: (slug: string) => void;
   onSelectTool: (tool: ToolId) => void;
 }
-
-const TOOL_NAMES: Record<ToolId, string> = {
-  'color-palette': 'Color Palette Generator',
-  'lorem-ipsum': 'Lorem Ipsum Generator',
-  'word-counter': 'Word Counter & Case Converter',
-  'password-generator': 'Random Password Generator',
-  'text-sorter': 'Text Sorter',
-  'find-replace': 'Find & Replace Text',
-  'remove-line-breaks': 'Remove Line Breaks',
-  'duplicate-remover': 'Duplicate Line Remover',
-  'whitespace-remover': 'Whitespace Remover',
-  'line-counter': 'Text Line Counter',
-  'invisible-character-remover': 'Invisible Character Remover',
-  'punctuation-cleaner': 'Text Punctuation Cleaner',
-  'number-extractor': 'Text Number Extractor',
-  'quote-remover': 'Text Quote Remover',
-  'prefix-suffix-cleaner': 'Text Prefix & Suffix Cleaner'
-};
 
 export default function BlogArticlePage({
   article,
@@ -303,7 +286,7 @@ export default function BlogArticlePage({
                   onClick={() => onSelectTool(toolId)}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white text-neutral-900 font-bold text-xs hover:bg-neutral-100 transition-colors cursor-pointer shadow-xs"
                 >
-                  <span>Open {TOOL_NAMES[toolId] || 'Tool'}</span>
+                  <span>Open {getToolById(toolId)?.name || 'Tool'}</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>
               ))}

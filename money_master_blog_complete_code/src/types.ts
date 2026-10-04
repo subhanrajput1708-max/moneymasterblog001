@@ -10,11 +10,11 @@ export type PageId =
   | 'disclaimer';
 
 export type BlogCategory =
-  | 'Text Cleaning'
-  | 'Productivity'
-  | 'Data Preparation'
-  | 'Online Work'
-  | 'Digital Organization';
+  | 'Personal Loans'
+  | 'Credit & Debt'
+  | 'Savings & Budgeting'
+  | 'Insurance & Auto'
+  | 'Retirement & Goals';
 
 export interface BlogArticleSection {
   heading: string;
@@ -84,11 +84,43 @@ export interface BlogArticle {
   }[];
 }
 
+export type ToolCategory =
+  | 'Text Tools'
+  | 'Developer & Web Tools'
+  | 'Image Tools'
+  | 'Calculators';
+
 export type ToolId =
-  | 'color-palette'
+  // Text Tools (7)
+  | 'text-cleaner'
   | 'lorem-ipsum'
   | 'word-counter'
+  | 'character-counter'
+  | 'case-converter'
+  | 'text-reverser'
+  | 'slug-generator'
+  // Developer & Web Tools (6)
+  | 'base64-converter'
+  | 'url-converter'
+  | 'json-formatter'
+  | 'uuid-generator'
+  | 'qr-code-generator'
   | 'password-generator'
+  // Image Tools (4)
+  | 'image-compressor'
+  | 'image-resizer'
+  | 'image-cropper'
+  | 'color-palette'
+  // Calculators (8)
+  | 'percentage-calculator'
+  | 'gst-tax-calculator'
+  | 'tip-calculator'
+  | 'loan-payment-calculator'
+  | 'age-calculator'
+  | 'date-difference-calculator'
+  | 'timestamp-converter'
+  | 'random-number-generator'
+  // Legacy alias compatibility
   | 'text-sorter'
   | 'find-replace'
   | 'remove-line-breaks'
@@ -103,11 +135,28 @@ export type ToolId =
 
 export interface ToolMeta {
   id: ToolId;
-  title: string;
-  category: 'Colors' | 'Text' | 'Security' | 'Productivity';
-  shortDesc: string;
-  description: string;
+  name: string;
+  category: ToolCategory;
+  summary: string;
   badge?: string;
+  seoTitle: string;
+  metaDescription: string;
+  h1: string;
+  explanation: string;
+  howToUse: string[];
+  example: {
+    title: string;
+    input: string;
+    output: string;
+    explanation?: string;
+  };
+  usefulTips: string[];
+  faqs: {
+    question: string;
+    answer: string;
+  }[];
+  relatedToolIds: ToolId[];
+  privacyNote: string;
 }
 
 export interface PaletteColor {

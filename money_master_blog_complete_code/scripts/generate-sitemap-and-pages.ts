@@ -2,15 +2,23 @@
  * Automated Sitemap & Static HTML Page Generator for Money Master Blog
  * 
  * Generates:
- * 1. Valid sitemaps.org XML sitemap with 100% real, canonical, crawlable Blogger URLs (NO hash fragments).
- * 2. High-fidelity static HTML pre-rendered pages in dist/ for all Blogger URLs (/p/*.html, /{year}/{month}/*.html)
- *    and homepage with rich semantic content, deep internal link graph, and Schema.org JSON-LD (Breadcrumbs, FAQPage, WebSite, BlogPosting).
+ * 1. Valid sitemaps.org XML sitemap with 100% real, canonical, crawlable URLs (NO hash fragments).
+ *    Includes:
+ *    - 8 Core Pages
+ *    - Exactly 25 Production-Ready Tool Pages (/tools/{tool.id}.html)
+ *    - Exactly 20 Financial & Productivity Articles (/YYYY/MM/{slug}.html)
+ * 2. High-fidelity static HTML pre-rendered pages in dist/ for all tools, core pages, and articles:
+ *    - Rich semantic HTML content for Googlebot and no-JS visitors
+ *    - Complete Schema.org JSON-LD (WebApplication, BreadcrumbList, FAQPage, BlogPosting)
+ *    - Working forms, step-by-step instructions, examples, tips, FAQs, and related tools
  * 3. Synchronized robots.txt, CNAME, and ads.txt configurations.
  */
 
 import fs from 'fs';
 import path from 'path';
 import { BLOG_ARTICLES, getRelatedArticles } from '../src/data/blogArticles';
+import { TOOLS_DATA, TOOL_CATEGORIES, getToolById } from '../src/data/toolsData';
+import { ToolMeta } from '../src/types';
 import { CANONICAL_DOMAIN, PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from '../src/utils/routes';
 
 interface CorePageDef {
@@ -30,15 +38,15 @@ const CORE_PAGES: CorePageDef[] = [
     priority: '1.0',
     changefreq: 'daily',
     title: 'Money Master Blog – Simple Online Tools for Everyday Tasks',
-    description: 'Money Master Blog provides simple online tools for generating color palettes, creating placeholder text, cleaning text, and completing everyday digital tasks.',
+    description: 'Money Master Blog provides 25 simple online tools for text, images, calculations, and everyday digital productivity tasks. No registration required.',
   },
   {
     id: 'tools',
     path: '/p/tools.html',
     priority: '0.9',
     changefreq: 'weekly',
-    title: 'Online Tools – Money Master Blog',
-    description: 'Explore free, lightweight browser-based tools on Money Master Blog including our Color Palette Generator, Text Cleaner, and Lorem Ipsum Generator.',
+    title: 'Free Online Tools for Everyday Tasks – Money Master Blog',
+    description: 'Simple, fast browser-based tools for text, images, calculations, productivity, and everyday digital tasks. Exactly 25 functional tools with zero server uploads.',
     alternatePaths: ['/tools/index.html', '/tools.html'],
   },
   {
@@ -47,7 +55,7 @@ const CORE_PAGES: CorePageDef[] = [
     priority: '0.9',
     changefreq: 'daily',
     title: 'Practical Guides & Digital Productivity Tips – Money Master Blog',
-    description: 'Browse practical guides on cleaning text, preparing spreadsheets, removing hidden characters, and improving digital productivity workflows.',
+    description: 'Browse 20 practical guides on personal finance, loan calculations, credit management, debt reduction, insurance evaluation, and digital productivity workflows.',
     alternatePaths: ['/blog/index.html', '/blog.html'],
   },
   {
@@ -74,7 +82,7 @@ const CORE_PAGES: CorePageDef[] = [
     priority: '0.5',
     changefreq: 'monthly',
     title: 'Privacy Policy – Money Master Blog',
-    description: 'Read the Money Master Blog Privacy Policy. Learn why our client-side browser tools process all text and colors locally without storing your data.',
+    description: 'Read the Money Master Blog Privacy Policy. Learn why our client-side browser tools process all text, calculations, and images locally without storing your data.',
     alternatePaths: ['/privacy/index.html', '/privacy.html'],
   },
   {
@@ -92,27 +100,9 @@ const CORE_PAGES: CorePageDef[] = [
     priority: '0.5',
     changefreq: 'monthly',
     title: 'Website Disclaimer – Money Master Blog',
-    description: 'Read the Money Master Blog Disclaimer regarding tool accuracy, monitor color calibration, text tokenization differences, and productivity use.',
+    description: 'Read the Money Master Blog Disclaimer regarding tool accuracy, educational calculations, financial estimates, and productivity use.',
     alternatePaths: ['/disclaimer/index.html', '/disclaimer.html'],
   },
-];
-
-const ALL_TOOLS = [
-  { id: 'color-palette', name: 'Color Palette Generator', category: 'Colors', summary: 'Generate harmonic color palettes, view HEX values, lock chosen tones, and copy CSS color values.' },
-  { id: 'lorem-ipsum', name: 'Lorem Ipsum Generator', category: 'Text', summary: 'Create custom placeholder text by paragraph, sentence, or word count for layouts and mockups.' },
-  { id: 'word-counter', name: 'Text Cleaner & Case Converter', category: 'Text', summary: 'Clean text, remove extra spaces, inspect real-time character metrics, and convert letter casing.' },
-  { id: 'password-generator', name: 'Random Password Generator', category: 'Security', summary: 'Generate cryptographically strong random passwords client-side with custom character filters.' },
-  { id: 'text-sorter', name: 'Text Sorter', category: 'Text', summary: 'Sort lines of text quickly using different sorting methods directly in the browser.' },
-  { id: 'find-replace', name: 'Find & Replace Text', category: 'Text', summary: 'Find specific words or phrases in text and replace them quickly without manually editing every occurrence.' },
-  { id: 'remove-line-breaks', name: 'Remove Line Breaks', category: 'Text', summary: 'Convert text containing unnecessary line breaks into cleaner continuous text.' },
-  { id: 'duplicate-remover', name: 'Duplicate Line Remover', category: 'Text', summary: 'Find and remove repeated lines from lists and text while keeping the unique lines.' },
-  { id: 'whitespace-remover', name: 'Whitespace Remover', category: 'Text', summary: 'Clean unnecessary spaces, tabs, and extra whitespace from text.' },
-  { id: 'line-counter', name: 'Text Line Counter', category: 'Text', summary: 'Count lines in a text input and provide useful basic text statistics.' },
-  { id: 'invisible-character-remover', name: 'Invisible Character Remover', category: 'Text', summary: 'Detect and remove hidden Unicode characters, zero-width spaces, byte order marks, and formatting artifacts.' },
-  { id: 'punctuation-cleaner', name: 'Text Punctuation Cleaner', category: 'Text', summary: 'Clean, normalize, or remove erratic and repeated punctuation marks while preserving numbers and contractions.' },
-  { id: 'number-extractor', name: 'Text Number Extractor', category: 'Text', summary: 'Extract integers, decimals, prices, percentages, or formatted numbers quickly from paragraphs or logs.' },
-  { id: 'quote-remover', name: 'Text Quote Remover', category: 'Text', summary: 'Identify and strip quotation marks, remove quoted dialogue sections, or extract quoted content across all styles.' },
-  { id: 'prefix-suffix-cleaner', name: 'Text Prefix & Suffix Cleaner', category: 'Text', summary: 'Add, remove, or modify prefixes and suffixes across every line with case-matching and line numbering options.' },
 ];
 
 function formatDateToIso(dateStr: string): string {
@@ -144,7 +134,7 @@ function generateSitemapXml(): string {
     '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
     '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9',
     '        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">',
-    '  <!-- Core Site Pages (Real Standalone Blogger Page URLs) -->',
+    '  <!-- Core Site Pages (Canonical Standalone Pages) -->',
   ];
 
   for (const page of CORE_PAGES) {
@@ -158,7 +148,20 @@ function generateSitemapXml(): string {
   }
 
   lines.push('');
-  lines.push(`  <!-- ${BLOG_ARTICLES.length} Practical Guides (Real Standalone Blogger Post URLs) -->`);
+  lines.push(`  <!-- Exactly 25 Production-Ready Online Tools -->`);
+
+  for (const tool of TOOLS_DATA) {
+    const loc = `${CANONICAL_DOMAIN}/tools/${tool.id}.html`;
+    lines.push('  <url>');
+    lines.push(`    <loc>${escapeXml(loc)}</loc>`);
+    lines.push(`    <lastmod>${today}</lastmod>`);
+    lines.push('    <changefreq>weekly</changefreq>');
+    lines.push('    <priority>0.9</priority>');
+    lines.push('  </url>');
+  }
+
+  lines.push('');
+  lines.push(`  <!-- Exactly ${BLOG_ARTICLES.length} Practical Financial & Productivity Guides -->`);
 
   for (const article of BLOG_ARTICLES) {
     const postPath = getBloggerPostPath(article);
@@ -184,160 +187,158 @@ function ensureDirectoryExistence(filePath: string) {
   if (fs.existsSync(dirname)) {
     return true;
   }
-  fs.mkdirSync(dirname, { recursive: true });
+  ensureDirectoryExistence(dirname);
+  fs.mkdirSync(dirname);
 }
 
 function renderHeader(): string {
   return `
   <header style="background: #ffffff; border-bottom: 1px solid #e5e7eb; padding: 16px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
-      <div>
-        <a href="/" style="font-size: 20px; font-weight: 700; color: #111827; text-decoration: none;">Money Master Blog</a>
-        <p style="font-size: 13px; color: #6b7280; margin: 2px 0 0 0;">Simple Online Tools &amp; Practical Guides</p>
-      </div>
+      <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+        <img src="/logo.png" alt="Money Master Blog Logo" width="44" height="44" style="height: 44px; width: 44px; object-fit: contain; border-radius: 8px; border: 1px solid #e5e7eb; background: #ffffff; padding: 2px;" />
+        <div>
+          <span style="font-size: 20px; font-weight: 800; color: #111827; display: block; line-height: 1.2;">Money Master Blog</span>
+          <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Free Online Tools &amp; Financial Guides</span>
+        </div>
+      </a>
       <nav style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; font-weight: 500;">
         <a href="/" style="color: #374151; text-decoration: none;">Home</a>
-        <a href="/p/tools.html" style="color: #374151; text-decoration: none;">Online Tools</a>
-        <a href="/p/blog-page.html" style="color: #374151; text-decoration: none;">Practical Guides</a>
+        <a href="/p/tools.html" style="color: #374151; text-decoration: none; font-weight: 600;">Online Tools (25)</a>
+        <a href="/p/blog-page.html" style="color: #374151; text-decoration: none;">Financial Guides</a>
         <a href="/p/about-us.html" style="color: #374151; text-decoration: none;">About Us</a>
         <a href="/p/contact-us.html" style="color: #374151; text-decoration: none;">Contact Us</a>
       </nav>
     </div>
-  </header>`;
+  </header>
+  `;
 }
 
 function renderFooter(): string {
   return `
-  <footer style="background: #111827; color: #9ca3af; padding: 48px 24px; margin-top: 64px; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; margin-bottom: 32px;">
-        <div>
-          <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin-bottom: 12px;">Money Master Blog</h3>
-          <p style="margin-bottom: 12px;">Lightweight, privacy-respecting browser utilities and real-world formatting guides. Created and maintained by <strong>Shahid Ali</strong> (7 years practical experience).</p>
-          <p style="color: #10b981; font-size: 13px;">✔ 100% Client-Side • Zero Data Storage • Completely Free</p>
+  <footer style="background: #111827; color: #9ca3af; padding: 48px 24px 32px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; margin-top: 64px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; border-bottom: 1px solid #1f2937; padding-bottom: 40px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <img src="/logo.png" alt="Money Master Blog" width="36" height="36" style="height: 36px; width: 36px; object-fit: contain; border-radius: 6px; background: #ffffff; padding: 2px;" />
+          <span style="font-size: 18px; font-weight: 800; color: #ffffff;">Money Master Blog</span>
         </div>
-        <div>
-          <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin-bottom: 12px;">Essential Tools</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
-            <li><a href="/p/tools.html" style="color: #d1d5db; text-decoration: none;">All 15 Browser Tools</a></li>
-            <li><a href="/p/tools.html" style="color: #d1d5db; text-decoration: none;">Color Palette Generator</a></li>
-            <li><a href="/p/tools.html" style="color: #d1d5db; text-decoration: none;">Text Cleaner &amp; Case Converter</a></li>
-            <li><a href="/p/tools.html" style="color: #d1d5db; text-decoration: none;">Duplicate Line Remover</a></li>
-            <li><a href="/p/tools.html" style="color: #d1d5db; text-decoration: none;">Invisible Character Remover</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin-bottom: 12px;">Featured Guides</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
-            <li><a href="/p/blog-page.html" style="color: #d1d5db; text-decoration: none;">All 20 Productivity Guides</a></li>
-            <li><a href="/2026/01/how-to-clean-text-copied-from-pdf-without-losing-formatting.html" style="color: #d1d5db; text-decoration: none;">Fix Broken PDF Line Breaks</a></li>
-            <li><a href="/2026/01/how-to-remove-invisible-and-zero-width-characters-from-text.html" style="color: #d1d5db; text-decoration: none;">Remove Zero-Width Spaces</a></li>
-            <li><a href="/2026/02/how-to-sort-a-messy-name-list-alphabetically-by-first-or-last-name.html" style="color: #d1d5db; text-decoration: none;">Sort Messy Name Lists</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin-bottom: 12px;">Editorial &amp; Legal</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; line-height: 2;">
-            <li><a href="/p/about-us.html" style="color: #d1d5db; text-decoration: none;">About Shahid Ali</a></li>
-            <li><a href="/p/contact-us.html" style="color: #d1d5db; text-decoration: none;">Contact Us</a></li>
-            <li><a href="/p/privacy-policy.html" style="color: #d1d5db; text-decoration: none;">Privacy Policy</a></li>
-            <li><a href="/p/terms-conditions.html" style="color: #d1d5db; text-decoration: none;">Terms &amp; Conditions</a></li>
-            <li><a href="/p/disclaimer.html" style="color: #d1d5db; text-decoration: none;">Website Disclaimer</a></li>
-          </ul>
-        </div>
+        <p style="color: #9ca3af; line-height: 1.6; font-size: 13px;">
+          Fast, lightweight, client-side tools and educational financial guides. All tools execute locally in your web browser with zero server tracking.
+        </p>
       </div>
-      <div style="border-top: 1px solid #374151; padding-top: 24px; text-align: center; font-size: 13px;">
-        <p>&copy; 2026 Money Master Blog (https://www.moneymasterblog.site/). All rights reserved.</p>
+      <div>
+        <h4 style="color: #ffffff; font-weight: 700; font-size: 15px; margin-bottom: 14px;">Tool Categories (25 Tools)</h4>
+        <ul style="list-style: none; padding: 0; margin: 0; line-height: 2; font-size: 13px;">
+          <li><a href="/p/tools.html" style="color: #9ca3af; text-decoration: none;">Text Tools (7)</a></li>
+          <li><a href="/p/tools.html" style="color: #9ca3af; text-decoration: none;">Developer &amp; Web Tools (6)</a></li>
+          <li><a href="/p/tools.html" style="color: #9ca3af; text-decoration: none;">Image Tools (4)</a></li>
+          <li><a href="/p/tools.html" style="color: #9ca3af; text-decoration: none;">Calculators &amp; Finance (8)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color: #ffffff; font-weight: 700; font-size: 15px; margin-bottom: 14px;">Financial Guides</h4>
+        <ul style="list-style: none; padding: 0; margin: 0; line-height: 2; font-size: 13px;">
+          <li><a href="/2026/01/how-to-calculate-the-real-cost-of-a-personal-loan-before-applying.html" style="color: #9ca3af; text-decoration: none;">Calculate Loan Real Cost</a></li>
+          <li><a href="/2026/02/how-to-find-hidden-fees-in-a-credit-card-agreement.html" style="color: #9ca3af; text-decoration: none;">Credit Card Hidden Fees</a></li>
+          <li><a href="/2026/02/how-to-build-a-monthly-debt-payment-plan-using-your-actual-income.html" style="color: #9ca3af; text-decoration: none;">Monthly Debt Payment Plan</a></li>
+          <li><a href="/p/blog-page.html" style="color: #38bdf8; text-decoration: none;">View All 20 Guides →</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color: #ffffff; font-weight: 700; font-size: 15px; margin-bottom: 14px;">Trust &amp; Transparency</h4>
+        <ul style="list-style: none; padding: 0; margin: 0; line-height: 2; font-size: 13px;">
+          <li><a href="/p/about-us.html" style="color: #9ca3af; text-decoration: none;">About Shahid Ali</a></li>
+          <li><a href="/p/contact-us.html" style="color: #9ca3af; text-decoration: none;">Contact Us</a></li>
+          <li><a href="/p/privacy-policy.html" style="color: #9ca3af; text-decoration: none;">Privacy Policy</a></li>
+          <li><a href="/p/terms-conditions.html" style="color: #9ca3af; text-decoration: none;">Terms &amp; Conditions</a></li>
+          <li><a href="/p/disclaimer.html" style="color: #9ca3af; text-decoration: none;">Disclaimer</a></li>
+        </ul>
       </div>
     </div>
-  </footer>`;
+    <div style="max-width: 1200px; margin: 24px auto 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; font-size: 12px; color: #6b7280;">
+      <span>© 2026 Money Master Blog. Written and curated by Shahid Ali. All rights reserved.</span>
+      <span>100% Client-Side In-Browser Execution.</span>
+    </div>
+  </footer>
+  `;
 }
 
 function renderBreadcrumbNav(items: { name: string; url?: string }[]): string {
-  const parts = items.map((item, index) => {
-    const isLast = index === items.length - 1;
-    if (isLast || !item.url) {
-      return `<span style="color: #4b5563; font-weight: 600;">${escapeXml(item.name)}</span>`;
-    }
-    return `<a href="${escapeXml(item.url)}" style="color: #2563eb; text-decoration: none;">${escapeXml(item.name)}</a>`;
-  });
   return `
   <nav aria-label="Breadcrumb" style="padding: 12px 0; margin-bottom: 24px; font-size: 14px; border-bottom: 1px solid #f3f4f6;">
-    <div style="max-width: 1000px; margin: 0 auto; padding: 0 16px;">
-      ${parts.join(' <span style="color: #9ca3af; margin: 0 6px;">/</span> ')}
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 16px;">
+      ${items.map((item, idx) => {
+        const isLast = idx === items.length - 1;
+        if (isLast) {
+          return `<span style="color: #4b5563; font-weight: 600;">${escapeXml(item.name)}</span>`;
+        }
+        return `<a href="${item.url || '/'}" style="color: #2563eb; text-decoration: none;">${escapeXml(item.name)}</a> <span style="color: #9ca3af; margin: 0 6px;">/</span>`;
+      }).join(' ')}
     </div>
-  </nav>`;
+  </nav>
+  `;
 }
 
 function renderHomePageBody(): string {
   return `
   ${renderHeader()}
-  <main style="max-width: 1200px; margin: 0 auto; padding: 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-    <section style="text-align: center; margin-bottom: 48px; padding: 40px 20px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px;">
-      <h1 style="font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 16px; line-height: 1.25;">Simple Online Tools for Everyday Tasks</h1>
-      <p style="font-size: 18px; color: #4b5563; max-width: 780px; margin: 0 auto 24px auto; line-height: 1.6;">
-        Money Master Blog provides 15 fast, 100% browser-based utilities and 20 in-depth practical guides. Clean text formatting, convert casing, strip line breaks, eliminate duplicates, and generate secure passwords with zero server storage.
+  <main style="max-width: 1100px; margin: 0 auto; padding: 32px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6;">
+    <section style="text-align: center; margin-bottom: 48px;">
+      <span style="display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #ecfdf5; color: #047857; padding: 6px 14px; border-radius: 9999px; margin-bottom: 16px; border: 1px solid #a7f3d0;">
+        ⚡ 25 Production-Ready Browser Utilities
+      </span>
+      <h1 style="font-size: 42px; font-weight: 800; color: #111827; line-height: 1.15; margin: 0 0 16px 0;">
+        Free Online Tools for Everyday Tasks
+      </h1>
+      <p style="font-size: 18px; color: #4b5563; max-width: 720px; margin: 0 auto 28px auto;">
+        Simple, fast browser-based tools for text, images, calculations, productivity, and everyday digital tasks. No unnecessary registration required.
       </p>
-      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-        <a href="/p/tools.html" style="background: #111827; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">Explore 15 Online Tools</a>
-        <a href="/p/blog-page.html" style="background: #f3f4f6; color: #1f2937; padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">Read Practical Guides</a>
+      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+        <a href="/p/tools.html" style="background: #111827; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">Browse All 25 Tools →</a>
+        <a href="/p/blog-page.html" style="background: #ffffff; color: #111827; border: 1px solid #d1d5db; padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none;">Read 20 Financial Guides</a>
       </div>
     </section>
 
+    <!-- 25 TOOLS GRID -->
     <section style="margin-bottom: 56px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px;">
-        <h2 style="font-size: 24px; font-weight: 700; color: #111827;">Essential Online Tools</h2>
-        <a href="/p/tools.html" style="color: #2563eb; font-weight: 600; text-decoration: none; font-size: 15px;">View all 15 tools →</a>
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;">
+        <h2 style="font-size: 24px; font-weight: 800; color: #111827; margin: 0;">Featured Online Utilities</h2>
+        <a href="/p/tools.html" style="color: #2563eb; font-weight: 600; font-size: 14px; text-decoration: none;">View All 25 Tools →</a>
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        ${ALL_TOOLS.map(t => `
-          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+        ${TOOLS_DATA.map((tool) => `
+          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
-              <span style="display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: #e0f2fe; color: #0369a1; margin-bottom: 8px;">${escapeXml(t.category)}</span>
-              <h3 style="font-size: 18px; font-weight: 600; margin: 0 0 8px 0;"><a href="/p/tools.html" style="color: #111827; text-decoration: none;">${escapeXml(t.name)}</a></h3>
-              <p style="font-size: 14px; color: #6b7280; line-height: 1.5; margin: 0 0 16px 0;">${escapeXml(t.summary)}</p>
+              <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #0284c7; background: #f0f9ff; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px;">${escapeXml(tool.category)}</span>
+              <h3 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 8px 0;">${escapeXml(tool.name)}</h3>
+              <p style="font-size: 13px; color: #4b5563; line-height: 1.5; margin: 0 0 16px 0;">${escapeXml(tool.summary)}</p>
             </div>
-            <a href="/p/tools.html" style="color: #2563eb; font-size: 14px; font-weight: 600; text-decoration: none;">Open Tool →</a>
+            <a href="/tools/${tool.id}.html" style="background: #111827; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; text-align: center;">Use Tool</a>
           </div>
         `).join('')}
       </div>
     </section>
 
+    <!-- 20 ARTICLES HIGHLIGHT -->
     <section style="margin-bottom: 56px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px;">
-        <h2 style="font-size: 24px; font-weight: 700; color: #111827;">Practical Productivity Guides</h2>
-        <a href="/p/blog-page.html" style="color: #2563eb; font-weight: 600; text-decoration: none; font-size: 15px;">Browse all 20 guides →</a>
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;">
+        <h2 style="font-size: 24px; font-weight: 800; color: #111827; margin: 0;">Practical Financial Guides (By Shahid Ali)</h2>
+        <a href="/p/blog-page.html" style="color: #2563eb; font-weight: 600; font-size: 14px; text-decoration: none;">View All 20 Guides →</a>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-        ${BLOG_ARTICLES.map(a => {
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        ${BLOG_ARTICLES.slice(0, 6).map((a) => {
           const postPath = getBloggerPostPath(a);
           return `
-          <article style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #6b7280; margin-bottom: 8px;">
-                <span>${escapeXml(a.category)}</span>
-                <time datetime="${formatDateToIso(a.publishedDate)}">${escapeXml(a.publishedDate)}</time>
-              </div>
-              <h3 style="font-size: 19px; font-weight: 700; line-height: 1.35; margin: 0 0 10px 0;">
-                <a href="${postPath}" style="color: #111827; text-decoration: none;">${escapeXml(a.title)}</a>
-              </h3>
-              <p style="font-size: 14px; color: #4b5563; line-height: 1.55; margin: 0 0 16px 0;">${escapeXml(a.excerpt)}</p>
-            </div>
-            <a href="${postPath}" style="color: #2563eb; font-weight: 600; font-size: 14px; text-decoration: none;">Read Full Guide (${escapeXml(a.readingTime)}) →</a>
+          <article style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px;">
+            <span style="font-size: 12px; font-weight: 600; color: #0284c7;">${escapeXml(a.category)}</span>
+            <h3 style="font-size: 17px; font-weight: 700; margin: 6px 0 10px 0;"><a href="${postPath}" style="color: #111827; text-decoration: none;">${escapeXml(a.title)}</a></h3>
+            <p style="font-size: 13px; color: #4b5563; line-height: 1.5; margin: 0 0 14px 0;">${escapeXml(a.excerpt)}</p>
+            <a href="${postPath}" style="font-size: 13px; color: #2563eb; font-weight: 600; text-decoration: none;">Read Guide →</a>
           </article>
         `;
         }).join('')}
       </div>
-    </section>
-
-    <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 32px; margin-bottom: 32px;">
-      <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 12px;">Curated by Shahid Ali (7 Years Practical Experience)</h2>
-      <p style="color: #4b5563; line-height: 1.7; margin-bottom: 16px;">
-        Money Master Blog was founded by Shahid Ali after 7 years working with digital content operations, text formatting, and online publishing. Our editorial mission is simple: provide clean, lightning-fast utilities without deceptive download buttons, invasive ads, or forced accounts.
-      </p>
-      <p style="color: #4b5563; line-height: 1.7;">
-        Learn more on our <a href="/p/about-us.html" style="color: #2563eb; font-weight: 600;">About Us</a> page or get in touch on the <a href="/p/contact-us.html" style="color: #2563eb; font-weight: 600;">Contact Us</a> page.
-      </p>
     </section>
   </main>
   ${renderFooter()}`;
@@ -346,35 +347,178 @@ function renderHomePageBody(): string {
 function renderToolsPageBody(): string {
   return `
   ${renderHeader()}
-  ${renderBreadcrumbNav([{ name: 'Home', url: '/' }, { name: 'Online Tools' }])}
+  ${renderBreadcrumbNav([{ name: 'Home', url: '/' }, { name: 'Free Online Tools' }])}
   <main style="max-width: 1100px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6;">
-    <header style="margin-bottom: 36px; text-align: center;">
-      <h1 style="font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 12px;">Online Tools – 15 Browser Utilities</h1>
-      <p style="font-size: 17px; color: #4b5563; max-width: 750px; margin: 0 auto;">
-        Free, lightweight browser utilities for color harmonies, word counting, casing conversion, password generation, line breaking, deduplication, and text cleanup.
+    <header style="margin-bottom: 40px; text-align: center;">
+      <span style="display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; background: #ecfdf5; color: #047857; padding: 4px 12px; border-radius: 9999px; margin-bottom: 12px; border: 1px solid #a7f3d0;">
+        ⚡ Exactly 25 Functional Tools
+      </span>
+      <h1 style="font-size: 34px; font-weight: 800; color: #111827; margin: 0 0 12px 0;">Free Online Tools for Everyday Tasks</h1>
+      <p style="font-size: 17px; color: #4b5563; max-width: 780px; margin: 0 auto;">
+        Simple, fast browser-based tools for text, images, calculations, productivity, and everyday digital tasks. No unnecessary registration required.
       </p>
     </header>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px;">
-      ${ALL_TOOLS.map(tool => `
-        <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px;">
-          <span style="display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px; background: #f3f4f6; color: #374151; margin-bottom: 8px;">${escapeXml(tool.category)}</span>
-          <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 10px 0;">${escapeXml(tool.name)}</h2>
-          <p style="font-size: 14px; color: #4b5563; line-height: 1.55; margin-bottom: 16px;">${escapeXml(tool.summary)}</p>
-          <a href="/p/tools.html" style="display: inline-block; background: #111827; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none;">Use Tool Locally</a>
+    <!-- CATEGORIES SUMMARY -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 36px;">
+      <span style="padding: 8px 16px; background: #111827; color: #ffffff; border-radius: 8px; font-size: 13px; font-weight: 600;">All Tools (25)</span>
+      <span style="padding: 8px 16px; background: #f3f4f6; color: #374151; border-radius: 8px; font-size: 13px; font-weight: 600;">Text Tools (7)</span>
+      <span style="padding: 8px 16px; background: #f3f4f6; color: #374151; border-radius: 8px; font-size: 13px; font-weight: 600;">Developer &amp; Web Tools (6)</span>
+      <span style="padding: 8px 16px; background: #f3f4f6; color: #374151; border-radius: 8px; font-size: 13px; font-weight: 600;">Image Tools (4)</span>
+      <span style="padding: 8px 16px; background: #f3f4f6; color: #374151; border-radius: 8px; font-size: 13px; font-weight: 600;">Calculators &amp; Finance (8)</span>
+    </div>
+
+    <!-- 25 TOOLS LIST -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 24px; margin-bottom: 48px;">
+      ${TOOLS_DATA.map((tool) => `
+        <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: #f3f4f6; color: #374151;">${escapeXml(tool.category)}</span>
+              <span style="font-size: 11px; color: #059669; font-weight: 600;">100% Client-Side</span>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 10px 0;">${escapeXml(tool.name)}</h2>
+            <p style="font-size: 14px; color: #4b5563; line-height: 1.55; margin-bottom: 18px;">${escapeXml(tool.summary)}</p>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 14px;">
+            <a href="/tools/${tool.id}.html" style="background: #111827; color: #ffffff; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">Use Tool</a>
+            <a href="/tools/${tool.id}.html" style="color: #2563eb; font-size: 13px; font-weight: 600; text-decoration: none;">Documentation &amp; FAQs →</a>
+          </div>
         </section>
       `).join('')}
     </div>
 
+    <!-- CLIENT SIDE PRIVACY GUARANTEE -->
     <section style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 32px; margin-bottom: 40px;">
-      <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 12px;">Why Choose Client-Side Tools on Money Master Blog?</h2>
-      <ul style="color: #4b5563; line-height: 1.8; padding-left: 20px;">
-        <li><strong>Complete Privacy:</strong> Your text, customer records, and passwords never leave your browser DOM memory.</li>
-        <li><strong>Instant Zero-Latency Execution:</strong> Computations run natively on your device without server latency or network lag.</li>
-        <li><strong>No Paywalls or Registration:</strong> All 15 tools are 100% accessible to every visitor worldwide.</li>
+      <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 12px;">Client-Side Execution &amp; Browser Privacy Guarantee</h2>
+      <p style="color: #4b5563; line-height: 1.7; margin-bottom: 14px;">
+        All 25 tools on Money Master Blog execute entirely within your browser memory using HTML5 Canvas, the Web Cryptography API, and local string processors. Your documents, photos, calculations, and passwords are never transmitted to any external server or saved in third-party databases.
+      </p>
+      <ul style="color: #4b5563; line-height: 1.8; padding-left: 20px; margin-bottom: 14px;">
+        <li><strong>Text Processing:</strong> Text Cleaner, Word Counter, Case Converter, Reverser, and Slug Generator manipulate text in local RAM.</li>
+        <li><strong>Security:</strong> Password Generator and UUID Generator use native cryptographically secure pseudorandom number generators (CSPRNG).</li>
+        <li><strong>Images:</strong> Image Compressor, Resizer, and Cropper run via the HTML5 2D Canvas context without uploads.</li>
+        <li><strong>Calculators:</strong> Loans, GST, Tip, Percentages, and Dates calculate instantly with zero network roundtrips.</li>
       </ul>
-      <p style="margin-top: 16px;"><a href="/p/blog-page.html" style="color: #2563eb; font-weight: 600;">View our 20 practical guides on using these tools →</a></p>
+      <p><a href="/p/blog-page.html" style="color: #2563eb; font-weight: 600;">Explore our 20 practical guides on utilizing these utilities →</a></p>
     </section>
+  </main>
+  ${renderFooter()}`;
+}
+
+function renderIndividualToolPageBody(tool: ToolMeta): string {
+  const relatedTools = tool.relatedToolIds
+    .map((id) => getToolById(id))
+    .filter((t): t is ToolMeta => t !== undefined);
+
+  return `
+  ${renderHeader()}
+  ${renderBreadcrumbNav([
+    { name: 'Home', url: '/' },
+    { name: 'Online Tools', url: '/p/tools.html' },
+    { name: tool.name },
+  ])}
+  <main style="max-width: 900px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
+    <!-- TOOL HEADER -->
+    <header style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+      <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+        <span style="font-size: 12px; font-weight: 700; color: #047857; background: #ecfdf5; padding: 3px 10px; border-radius: 9999px;">${escapeXml(tool.category)}</span>
+        <span style="font-size: 12px; color: #6b7280;">•</span>
+        <span style="font-size: 12px; color: #6b7280;">${escapeXml(tool.privacyNote)}</span>
+      </div>
+      <h1 style="font-size: 32px; font-weight: 800; color: #111827; margin: 0 0 12px 0;">${escapeXml(tool.h1)}</h1>
+      <p style="font-size: 17px; color: #4b5563; line-height: 1.6; margin: 0 0 16px 0;">${escapeXml(tool.explanation)}</p>
+      <div>
+        <a href="/p/tools.html" style="color: #2563eb; font-weight: 600; font-size: 14px; text-decoration: none;">← Back to All 25 Tools Directory</a>
+      </div>
+    </header>
+
+    <!-- LIVE TOOL PLACEHOLDER / NOTICE -->
+    <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 12px; padding: 28px; margin-bottom: 36px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0;">Interactive ${escapeXml(tool.name)} Workspace</h2>
+        <span style="background: #ecfdf5; color: #065f46; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Active Tool</span>
+      </div>
+      <p style="font-size: 14px; color: #4b5563; margin-bottom: 18px;">
+        ${escapeXml(tool.summary)}
+      </p>
+      <div style="background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 8px; padding: 20px; text-align: center;">
+        <p style="font-size: 14px; color: #374151; font-weight: 600; margin-bottom: 8px;">
+          Ready to use: Open the interactive widget above.
+        </p>
+        <p style="font-size: 12px; color: #6b7280; margin: 0;">
+          All computations, image conversions, and text analyses execute client-side directly on your device.
+        </p>
+      </div>
+    </div>
+
+    <!-- HOW TO USE -->
+    <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; margin-bottom: 32px;">
+      <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">How to Use the ${escapeXml(tool.name)}</h2>
+      <ol style="padding-left: 20px; margin: 0; line-height: 1.8;">
+        ${tool.howToUse.map((step) => `<li style="margin-bottom: 8px;">${escapeXml(step)}</li>`).join('')}
+      </ol>
+    </section>
+
+    <!-- PRACTICAL EXAMPLE -->
+    <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; margin-bottom: 32px;">
+      <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Practical Example: ${escapeXml(tool.example.title)}</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
+        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px;">
+          <strong style="display: block; font-size: 12px; color: #6b7280; text-transform: uppercase; margin-bottom: 4px;">Sample Input:</strong>
+          <pre style="margin: 0; font-family: monospace; font-size: 13px; color: #111827; white-space: pre-wrap;">${escapeXml(tool.example.input)}</pre>
+        </div>
+        <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 14px;">
+          <strong style="display: block; font-size: 12px; color: #065f46; text-transform: uppercase; margin-bottom: 4px;">Processed Output:</strong>
+          <pre style="margin: 0; font-family: monospace; font-size: 13px; color: #064e3b; white-space: pre-wrap;">${escapeXml(tool.example.output)}</pre>
+        </div>
+      </div>
+      ${tool.example.explanation ? `<p style="font-size: 14px; color: #4b5563; margin: 0;">${escapeXml(tool.example.explanation)}</p>` : ''}
+    </section>
+
+    <!-- USEFUL TIPS -->
+    <section style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; margin-bottom: 32px;">
+      <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 12px 0;">Useful Tips &amp; Best Practices</h2>
+      <ul style="padding-left: 20px; margin: 0; line-height: 1.8;">
+        ${tool.usefulTips.map((tip) => `<li style="margin-bottom: 6px;">${escapeXml(tip)}</li>`).join('')}
+      </ul>
+    </section>
+
+    <!-- FREQUENTLY ASKED QUESTIONS -->
+    <section style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; margin-bottom: 32px;">
+      <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 20px 0;">Frequently Asked Questions</h2>
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        ${tool.faqs.map((faq) => `
+          <div style="border-bottom: 1px solid #f3f4f6; padding-bottom: 16px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #111827; margin: 0 0 6px 0;">${escapeXml(faq.question)}</h3>
+            <p style="font-size: 14px; color: #4b5563; margin: 0; line-height: 1.6;">${escapeXml(faq.answer)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <!-- RELATED TOOLS -->
+    ${relatedTools.length > 0 ? `
+    <section style="margin-bottom: 32px;">
+      <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Related Online Tools</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+        ${relatedTools.map((rel) => `
+          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 18px;">
+            <span style="font-size: 11px; font-weight: 600; color: #0284c7; text-transform: uppercase;">${escapeXml(rel.category)}</span>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 6px 0 8px 0;">
+              <a href="/tools/${rel.id}.html" style="color: #111827; text-decoration: none;">${escapeXml(rel.name)}</a>
+            </h3>
+            <p style="font-size: 13px; color: #4b5563; line-height: 1.5; margin: 0 0 12px 0;">${escapeXml(rel.summary)}</p>
+            <a href="/tools/${rel.id}.html" style="font-size: 13px; color: #2563eb; font-weight: 600; text-decoration: none;">Use Tool →</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+    ` : ''}
+
+    <div style="text-align: center; margin: 40px 0;">
+      <a href="/p/tools.html" style="display: inline-block; background: #111827; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 700; text-decoration: none;">← Browse All 25 Tools</a>
+    </div>
   </main>
   ${renderFooter()}`;
 }
@@ -382,12 +526,12 @@ function renderToolsPageBody(): string {
 function renderBlogIndexBody(): string {
   return `
   ${renderHeader()}
-  ${renderBreadcrumbNav([{ name: 'Home', url: '/' }, { name: 'Practical Guides' }])}
+  ${renderBreadcrumbNav([{ name: 'Home', url: '/' }, { name: 'Financial Guides' }])}
   <main style="max-width: 1100px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6;">
     <header style="margin-bottom: 40px; text-align: center;">
-      <h1 style="font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 12px;">Practical Guides &amp; Digital Productivity Tips</h1>
+      <h1 style="font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 12px;">Financial Planning &amp; Practical Guides</h1>
       <p style="font-size: 17px; color: #4b5563; max-width: 780px; margin: 0 auto;">
-        20 in-depth articles curated by Shahid Ali addressing real-world text formatting friction, data preparation, spreadsheet hygiene, and digital productivity workflows.
+        20 comprehensive, educational guides written by Shahid Ali on calculating real loan costs, finding hidden credit card fees, creating debt plans, estimating emergency funds, evaluating insurance, and retirement planning.
       </p>
     </header>
 
@@ -401,6 +545,7 @@ function renderBlogIndexBody(): string {
               <span style="font-weight: 600; color: #0284c7;">${escapeXml(article.category)}</span>
               <time datetime="${formatDateToIso(article.publishedDate)}">${escapeXml(article.publishedDate)}</time>
             </div>
+            <p style="font-size: 12px; color: #6b7280; margin: 0 0 8px 0;">Written by <strong style="color: #111827;">Shahid Ali</strong></p>
             <h2 style="font-size: 20px; font-weight: 700; line-height: 1.35; margin: 0 0 10px 0;">
               <a href="${postPath}" style="color: #111827; text-decoration: none;">${escapeXml(article.title)}</a>
             </h2>
@@ -408,9 +553,10 @@ function renderBlogIndexBody(): string {
           </div>
           <div style="border-top: 1px solid #f3f4f6; padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 13px; color: #6b7280;">${escapeXml(article.readingTime)}</span>
-            <a href="${postPath}" style="color: #2563eb; font-weight: 600; font-size: 14px; text-decoration: none;">Read Guide →</a>
+            <a href="${postPath}" style="background: #111827; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; text-decoration: none;">Read More →</a>
           </div>
-        </article>`;
+        </article>
+      `;
       }).join('')}
     </div>
   </main>
@@ -418,22 +564,20 @@ function renderBlogIndexBody(): string {
 }
 
 function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
-  const postPath = getBloggerPostPath(article);
   const related = getRelatedArticles(article.slug, 3);
-
   return `
   ${renderHeader()}
   ${renderBreadcrumbNav([
     { name: 'Home', url: '/' },
-    { name: 'Practical Guides', url: '/p/blog-page.html' },
-    { name: article.title }
+    { name: 'Financial Guides', url: '/p/blog-page.html' },
+    { name: article.title },
   ])}
   <main style="max-width: 840px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
     <article>
       <header style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
         <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 14px; color: #6b7280; margin-bottom: 12px;">
           <span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 600;">${escapeXml(article.category)}</span>
-          <span>By <strong>Shahid Ali</strong></span>
+          <span>Written by <strong>Shahid Ali</strong></span>
           <span>•</span>
           <time datetime="${formatDateToIso(article.publishedDate)}">${escapeXml(article.publishedDate)}</time>
           <span>•</span>
@@ -457,38 +601,42 @@ function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
               ${section.bulletPoints.map(bp => `<li style="margin-bottom: 6px;">${escapeXml(bp)}</li>`).join('')}
             </ul>
           ` : ''}
+          ${section.numberedList && section.numberedList.length > 0 ? `
+            <ol style="padding-left: 20px; margin: 0 0 16px 0;">
+              ${section.numberedList.map(item => `<li style="margin-bottom: 8px;">${escapeXml(item)}</li>`).join('')}
+            </ol>
+          ` : ''}
           ${section.example ? `
             <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin: 16px 0;">
-              <strong style="font-size: 14px; color: #374151; display: block; margin-bottom: 8px;">Example: ${escapeXml(section.example.title)}</strong>
-              <div style="font-family: monospace; font-size: 13px; background: #ffffff; border: 1px solid #e5e7eb; padding: 10px; border-radius: 6px; margin-bottom: 8px; color: #dc2626;"><strong>Before:</strong> ${escapeXml(section.example.before)}</div>
-              <div style="font-family: monospace; font-size: 13px; background: #ffffff; border: 1px solid #e5e7eb; padding: 10px; border-radius: 6px; color: #16a34a;"><strong>After:</strong> ${escapeXml(section.example.after)}</div>
+              <strong style="font-size: 14px; color: #374151; display: block; margin-bottom: 8px;">${escapeXml(section.example.title)}</strong>
+              <div style="font-family: monospace; font-size: 13px; background: #ffffff; border: 1px solid #e5e7eb; padding: 10px; border-radius: 6px; margin-bottom: 8px; color: #dc2626; white-space: pre-wrap;">${escapeXml(section.example.before)}</div>
+              <div style="font-family: monospace; font-size: 13px; background: #ffffff; border: 1px solid #e5e7eb; padding: 10px; border-radius: 6px; color: #16a34a; white-space: pre-wrap;">${escapeXml(section.example.after)}</div>
+              ${section.example.explanation ? `<p style="font-size: 13px; color: #4b5563; margin-top: 8px;">${escapeXml(section.example.explanation)}</p>` : ''}
             </div>
           ` : ''}
         </section>
       `).join('')}
 
-      ${article.faqs && article.faqs.length > 0 ? `
-        <section style="margin: 40px 0; border-top: 1px solid #e5e7eb; padding-top: 32px;">
-          <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 20px;">Frequently Asked Questions</h2>
-          <div style="display: flex; flex-direction: column; gap: 16px;">
-            ${article.faqs.map(faq => `
-              <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 18px;">
-                <h3 style="font-size: 16px; font-weight: 600; color: #111827; margin: 0 0 8px 0;">${escapeXml(faq.question)}</h3>
-                <p style="margin: 0; color: #4b5563; font-size: 14px;">${escapeXml(faq.answer)}</p>
-              </div>
-            `).join('')}
+      <!-- AUTHOR BOX -->
+      <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin: 40px 0;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: #111827; color: #ffffff; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; shrink: 0;">
+            SA
           </div>
-        </section>
-      ` : ''}
+          <div>
+            <h3 style="font-size: 17px; font-weight: 700; color: #111827; margin: 0;">Written by Shahid Ali</h3>
+            <p style="font-size: 13px; color: #4b5563; margin: 3px 0 0 0;">7 years of practical experience in digital content workflows &amp; web utilities.</p>
+          </div>
+        </div>
+      </div>
 
-      <section style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 24px; margin: 40px 0; text-align: center;">
-        <h3 style="font-size: 18px; font-weight: 700; color: #1e3a8a; margin: 0 0 8px 0;">Ready to apply these techniques?</h3>
-        <p style="color: #1e40af; font-size: 14px; margin: 0 0 16px 0;">Try our 15 free browser utilities directly on Money Master Blog with 100% local privacy.</p>
-        <a href="/p/tools.html" style="display: inline-block; background: #1d4ed8; color: #ffffff; padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; text-decoration: none;">Open Online Tools Directory</a>
-      </section>
+      <!-- EDUCATIONAL DISCLAIMER -->
+      <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 16px; margin: 24px 0; font-size: 12px; color: #92400e; line-height: 1.6;">
+        <strong>Educational Disclaimer:</strong> This article is published exclusively for educational and informational purposes. It does not constitute personalized financial, credit, legal, or investment advice. Interest rates, loan eligibility, card terms, and insurance provisions vary according to state regulations and individual provider underwriting criteria.
+      </div>
 
       <section style="border-top: 1px solid #e5e7eb; padding-top: 32px; margin-top: 40px;">
-        <h3 style="font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 16px;">Related Practical Guides</h3>
+        <h3 style="font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 16px;">Related Financial Guides</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
           ${related.map(r => `
             <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;">
@@ -516,14 +664,14 @@ function renderAboutPageBody(): string {
 
     <section style="margin-bottom: 32px;">
       <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 14px;">Editorial Mission</h2>
-      <p style="margin-bottom: 14px;">Money Master Blog was founded and is maintained by Shahid Ali. After 7 years of relying on web utilities for daily text drafting, layout formatting, and content design, Shahid grew frustrated with how cluttered modern utility websites had become—cluttered with intrusive ads, misleading download buttons, paywalls, and invasive tracking cookies.</p>
-      <p>Money Master Blog proves that online tools can remain fast, transparent, and completely free. Every tool runs locally in your browser DOM, ensuring your private lists, passwords, and copy remain exclusively on your device.</p>
+      <p style="margin-bottom: 14px;">Money Master Blog was founded and is maintained by Shahid Ali. After 7 years of relying on web utilities for daily text drafting, layout formatting, calculations, and content operations, Shahid built this hub to give users fast, transparent, and completely free online utilities.</p>
+      <p>Every one of our 25 tools runs locally in your browser DOM, ensuring your private lists, passwords, calculations, and photos remain exclusively on your device.</p>
     </section>
 
     <section style="margin-bottom: 32px;">
       <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 14px;">Our Core Philosophy: Functional Simplicity</h2>
       <ul style="padding-left: 20px; line-height: 1.8;">
-        <li><strong>No Paywalls or Accounts:</strong> All 15 tools and 20 guides are open and free forever.</li>
+        <li><strong>No Paywalls or Accounts:</strong> All 25 tools and 20 guides are open and free forever.</li>
         <li><strong>Client-Side Processing:</strong> Computations run natively in browser memory. Nothing is sent to remote servers.</li>
         <li><strong>Honest Representation:</strong> We do not fabricate fake certifications or awards; we rely solely on functional speed and utility.</li>
       </ul>
@@ -550,17 +698,8 @@ function renderContactPageBody(): string {
 
     <section style="margin-bottom: 32px;">
       <h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 14px;">How to Reach Shahid Ali</h2>
-      <p style="margin-bottom: 14px;">We appreciate hearing from our visitors. If you have an idea for a new text utility, want to report an issue, or need clarification on any of our 20 practical guides, please get in touch.</p>
+      <p style="margin-bottom: 14px;">We appreciate hearing from our visitors. If you have an idea for a new utility, want to report an issue with any of our 25 tools, or need clarification on any of our 20 practical guides, please get in touch.</p>
       <p>We review inquiries regularly and aim to respond within 24 to 48 business hours.</p>
-    </section>
-
-    <section style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-      <h2 style="font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 12px;">Guidelines for Submitting Feature Requests</h2>
-      <ul style="padding-left: 20px; line-height: 1.8;">
-        <li>Explain the specific formatting or text problem you are trying to solve.</li>
-        <li>Provide sample input text and the desired clean output format.</li>
-        <li>Note whether the feature would benefit general web users.</li>
-      </ul>
     </section>
   </main>
   ${renderFooter()}`;
@@ -648,7 +787,6 @@ function generateStaticHtml(
   // Pre-render rich semantic body markup inside <div id="root"> for Googlebot & fast indexing
   if (meta.bodyContent) {
     const rootTag = '<div id="root">';
-    // If root tag already has content, replace its inner content, otherwise prepend
     if (html.includes('<div id="root"></div>')) {
       html = html.replace('<div id="root"></div>', `${rootTag}\n${meta.bodyContent}\n</div>`);
     } else {
@@ -709,11 +847,11 @@ export function runGenerator() {
     if (fs.existsSync(distIndexPath)) {
       const templateHtml = fs.readFileSync(distIndexPath, 'utf-8');
 
-      // 2a. Pre-render dist/index.html (HOMEPAGE) with full crawlable content & schema!
-      const homeCanonical = getCanonicalUrl('/');
-      const homeHtml = generateStaticHtml(templateHtml, {
+      // 2a. Pre-render Homepage into dist/index.html
+      const homeCanonical = `${CANONICAL_DOMAIN}/`;
+      const preRenderedHomeHtml = generateStaticHtml(templateHtml, {
         title: 'Money Master Blog – Simple Online Tools for Everyday Tasks',
-        description: 'Money Master Blog provides simple online tools for generating color palettes, creating placeholder text, cleaning text, and completing everyday digital tasks.',
+        description: 'Money Master Blog provides 25 simple online tools for text, images, calculations, and everyday digital productivity tasks. No registration required.',
         canonicalUrl: homeCanonical,
         bodyContent: renderHomePageBody(),
         jsonLd: [
@@ -721,26 +859,24 @@ export function runGenerator() {
             '@type': 'WebSite',
             name: 'Money Master Blog',
             url: CANONICAL_DOMAIN,
-            description: 'Simple online tools for everyday digital tasks, text cleaning, formatting, and practical productivity guides.',
-            author: {
-              '@type': 'Person',
-              name: 'Shahid Ali',
+            description: 'Free online tools and practical financial guides with 100% client-side execution.',
+            publisher: {
+              '@type': 'Organization',
+              name: 'Money Master Blog',
+              logo: {
+                '@type': 'ImageObject',
+                url: `${CANONICAL_DOMAIN}/logo.png`,
+              },
             },
-          },
-          {
-            '@type': 'Organization',
-            name: 'Money Master Blog',
-            url: CANONICAL_DOMAIN,
-            logo: `${CANONICAL_DOMAIN}/logo.png`,
           },
         ],
       });
-      fs.writeFileSync(distIndexPath, homeHtml, 'utf-8');
+      fs.writeFileSync(distIndexPath, preRenderedHomeHtml, 'utf-8');
       console.log(`✅ Pre-rendered homepage into ${distIndexPath}`);
 
-      // 2b. Generate HTML files for Core Standalone Pages
+      // 2b. Generate HTML files for Core Pages
       for (const page of CORE_PAGES) {
-        if (page.path === '/') continue; // homepage handled above
+        if (page.path === '/') continue;
 
         const canonicalUrl = getCanonicalUrl(page.path);
         let bodyContent = '';
@@ -761,22 +897,20 @@ export function runGenerator() {
         } else if (page.id === 'privacy') {
           bodyContent = renderLegalPageBody(
             'Privacy Policy',
-            'How Money Master Blog safeguards your privacy through 100% client-side computing.',
-            `<p>Money Master Blog respects your privacy. All 15 text utilities and tools run purely client-side in your web browser. No text input, clipboard snippets, passwords, or files are transmitted to or stored on any server.</p>
-             <h3 style="font-size: 18px; margin: 20px 0 8px 0;">Google AdSense &amp; Cookies</h3>
-             <p>Third-party vendors, including Google, use cookies to serve ads based on prior visits. Users may opt out of personalized advertising by visiting Google Ads Settings.</p>`
+            'How Money Master Blog handles visitor privacy, cookies, and local browser processing.',
+            `<p>Money Master Blog operates with a strict privacy-first principle. All 25 tools process text, calculations, and images locally in your browser memory. We never transmit or store your inputs on remote servers.</p>`
           );
         } else if (page.id === 'terms') {
           bodyContent = renderLegalPageBody(
             'Terms &amp; Conditions',
             'Usage rights, acceptable use, and output ownership on Money Master Blog.',
-            `<p>By accessing Money Master Blog, you agree to these terms. All output generated through our utilities (cleaned text, color palettes, passwords) belongs entirely to you for personal and commercial use without attribution requirements.</p>`
+            `<p>By accessing Money Master Blog, you agree to these terms. All output generated through our utilities belongs entirely to you for personal and commercial use without attribution requirements.</p>`
           );
         } else if (page.id === 'disclaimer') {
           bodyContent = renderLegalPageBody(
             'Website Disclaimer',
             'Informational purposes, tool accuracy, and productivity utility.',
-            `<p>The tools and guides on Money Master Blog are provided for practical digital utility on an "as-is" basis. While our algorithms are thoroughly tested for edge-case text handling, users should verify critical spreadsheet data before final import.</p>`
+            `<p>The tools and guides on Money Master Blog are provided for practical digital utility on an "as-is" basis. Calculations and financial figures serve educational estimation purposes.</p>`
           );
         }
 
@@ -819,7 +953,74 @@ export function runGenerator() {
         }
       }
 
-      // 2c. Generate HTML files for all 20 Articles
+      // 2c. Generate HTML files for all 25 individual Tools
+      for (const tool of TOOLS_DATA) {
+        const toolUrl = `${CANONICAL_DOMAIN}/tools/${tool.id}.html`;
+        const breadcrumbs = [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: CANONICAL_DOMAIN },
+          { '@type': 'ListItem', position: 2, name: 'Online Tools', item: `${CANONICAL_DOMAIN}/p/tools.html` },
+          { '@type': 'ListItem', position: 3, name: tool.name, item: toolUrl },
+        ];
+
+        const jsonLdGraph: object[] = [
+          {
+            '@type': 'WebApplication',
+            name: `${tool.name} – Money Master Blog`,
+            applicationCategory: 'UtilitiesApplication',
+            operatingSystem: 'All',
+            browserRequirements: 'Requires JavaScript. Requires HTML5.',
+            url: toolUrl,
+            description: tool.metaDescription,
+            author: {
+              '@type': 'Person',
+              name: 'Shahid Ali',
+            },
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'USD',
+            },
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: breadcrumbs,
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: tool.faqs.map((f) => ({
+              '@type': 'Question',
+              name: f.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: f.answer,
+              },
+            })),
+          },
+        ];
+
+        const bodyContent = renderIndividualToolPageBody(tool);
+        const html = generateStaticHtml(templateHtml, {
+          title: `${tool.seoTitle} – Money Master Blog`,
+          description: tool.metaDescription,
+          canonicalUrl: toolUrl,
+          bodyContent,
+          jsonLd: jsonLdGraph,
+        });
+
+        // Write /tools/${tool.id}.html
+        const directToolPath = path.join(distDir, 'tools', `${tool.id}.html`);
+        ensureDirectoryExistence(directToolPath);
+        fs.writeFileSync(directToolPath, html, 'utf-8');
+
+        // Write clean folder /tools/${tool.id}/index.html
+        const cleanToolPath = path.join(distDir, 'tools', tool.id, 'index.html');
+        ensureDirectoryExistence(cleanToolPath);
+        fs.writeFileSync(cleanToolPath, html, 'utf-8');
+      }
+
+      console.log(`✅ Pre-rendered static HTML for 25 individual tools into dist/tools/*.html`);
+
+      // 2d. Generate HTML files for all 20 Articles
       for (const article of BLOG_ARTICLES) {
         const postPath = getBloggerPostPath(article);
         const canonicalUrl = getCanonicalUrl(postPath);
@@ -828,7 +1029,7 @@ export function runGenerator() {
 
         const breadcrumbs = [
           { '@type': 'ListItem', position: 1, name: 'Home', item: CANONICAL_DOMAIN },
-          { '@type': 'ListItem', position: 2, name: 'Practical Guides', item: `${CANONICAL_DOMAIN}/p/blog-page.html` },
+          { '@type': 'ListItem', position: 2, name: 'Financial Guides', item: `${CANONICAL_DOMAIN}/p/blog-page.html` },
           { '@type': 'ListItem', position: 3, name: article.title, item: canonicalUrl },
         ];
 
@@ -859,7 +1060,6 @@ export function runGenerator() {
           },
         ];
 
-        // If article has FAQs, add FAQPage schema
         if (article.faqs && article.faqs.length > 0) {
           jsonLdGraph.push({
             '@type': 'FAQPage',
@@ -884,12 +1084,12 @@ export function runGenerator() {
           jsonLd: jsonLdGraph,
         });
 
-        // 1. Primary Blogger post path (e.g. /2026/01/how-to-clean-text...html)
+        // Primary Blogger post path (e.g. /2026/01/how-to-clean-text...html)
         const targetFilePath = path.join(distDir, postPath.replace(/^\//, ''));
         ensureDirectoryExistence(targetFilePath);
         fs.writeFileSync(targetFilePath, html, 'utf-8');
 
-        // 2. Clean alias path (e.g. /blog/how-to-clean-text.../index.html)
+        // Clean alias path (e.g. /blog/how-to-clean-text.../index.html)
         const cleanAliasPath = path.join(distDir, 'blog', article.slug, 'index.html');
         ensureDirectoryExistence(cleanAliasPath);
         fs.writeFileSync(cleanAliasPath, html, 'utf-8');

@@ -31,6 +31,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { PageId, ToolId } from '../../types';
+import { TOOLS_DATA } from '../../data/toolsData';
 import ColorPaletteGenerator from '../tools/ColorPaletteGenerator';
 import WordCounterCaseConverter from '../tools/WordCounterCaseConverter';
 import LoremIpsumGenerator from '../tools/LoremIpsumGenerator';
@@ -68,7 +69,36 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
     {
       question: 'What tools are available on the website?',
       answer:
-        'Money Master Blog features 15 practical browser utilities:\n1. Color Palette Generator: Create harmonic color schemes, view HEX codes, and copy palette values.\n2. Lorem Ipsum Generator: Generate custom placeholder text for mockups.\n3. Text Cleaner & Case Converter: Strip extra spaces, check character metrics, and transform letter casing.\n4. Random Password Generator: Generate cryptographically strong random credentials.\n5. Text Sorter: Sort lists alphabetically (A–Z, Z–A) or by line length.\n6. Find & Replace Text: Search and replace terms across multi-paragraph text.\n7. Remove Line Breaks: Convert broken PDF or email lines into continuous paragraphs.\n8. Duplicate Line Remover: Clean repeated lines from lists while retaining unique items.\n9. Whitespace Remover: Normalize spaces, tabs, and blank lines.\n10. Text Line Counter: Inspect live lines, words, characters, and longest/shortest lines.\n11. Invisible Character Remover: Detect and strip zero-width spaces, BOMs, and hidden formatting characters.\n12. Text Punctuation Cleaner: Collapse repeated punctuation marks and fix erratic spacing.\n13. Text Number Extractor: Extract integers, decimals, prices, and percentages from text.\n14. Text Quote Remover: Strip quote marks or delete quoted dialogue across straight and curly styles.\n15. Text Prefix & Suffix Cleaner: Add, remove, or modify prefixes and suffixes across every line.',
+        'Money Master Blog features 25 practical, production-ready browser utilities organized into 4 categories:\n\n' +
+        'Text Tools:\n' +
+        '1. Text Cleaner: Remove excess spaces, blank lines, HTML tags, and formatting artifacts.\n' +
+        '2. Lorem Ipsum Generator: Generate custom dummy text by paragraphs, sentences, or words.\n' +
+        '3. Word Counter: Live count of words, characters, sentences, paragraphs, and reading time.\n' +
+        '4. Character Counter: Track exact characters with constraints for SEO and social posts.\n' +
+        '5. Case Converter: Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, etc.\n' +
+        '6. Text Reverser: Reverse characters, invert word order, reverse lines, or flip text.\n' +
+        '7. Text-to-Slug Generator: Generate clean, SEO-friendly URL slugs with stop-word filters.\n\n' +
+        'Developer & Web Tools:\n' +
+        '8. Base64 Encoder/Decoder: Convert UTF-8 text to Base64 or decode Base64 strings.\n' +
+        '9. URL Encoder/Decoder: Percent-encode URLs or decode complex query strings safely.\n' +
+        '10. JSON Formatter & Validator: Beautify, validate syntax, sort keys, and minify JSON.\n' +
+        '11. UUID Generator: Create cryptographically secure Version 4 UUIDs in bulk.\n' +
+        '12. QR Code Generator: Create custom, downloadable high-res QR code PNGs.\n' +
+        '13. Password Generator: Generate cryptographically strong random credentials.\n\n' +
+        'Image Tools:\n' +
+        '14. Image Compressor: Compress JPG, PNG, and WebP images locally with quality sliders.\n' +
+        '15. Image Resizer: Scale image dimensions with aspect ratio lock and social media presets.\n' +
+        '16. Image Cropper: Crop photos to preset aspect ratios (1:1, 4:3, 16:9, 9:16) or freeform.\n' +
+        '17. Color Palette Generator: Create harmonic color schemes and export CSS variables.\n\n' +
+        'Calculators:\n' +
+        '18. Percentage Calculator: Solve all percentage, increase/decrease, and discount problems.\n' +
+        '19. GST / Tax Calculator: Add or remove VAT, GST, and sales tax with custom rates.\n' +
+        '20. Tip Calculator: Calculate gratuities, split checks evenly, and round totals.\n' +
+        '21. Loan Payment Calculator: Estimate installments, total interest, and total repayment.\n' +
+        '22. Age Calculator: Exact chronological age in years, months, days, plus next birthday countdown.\n' +
+        '23. Date Difference Calculator: Find duration in calendar days, weeks, and working business days.\n' +
+        '24. Timestamp Converter: Convert Unix epoch timestamps to UTC/Local and dates to epoch.\n' +
+        '25. Random Number Generator: Generate unbiased random numbers, lotto picks, or dice rolls.',
     },
     {
       question: 'Who can use the tools on Money Master Blog?',
@@ -98,7 +128,7 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
     {
       question: 'What kind of topics and guides are covered in the Blog section?',
       answer:
-        'The Blog section contains 20 comprehensive, practical guides written by Shahid Ali. Topics include solving PDF line-break formatting errors, removing invisible zero-width Unicode characters, sorting messy name lists, preparing clean CSV data for spreadsheets, fixing curly quotation marks in code terminals, and applying client-side privacy best practices.',
+        'The Blog section contains 20 comprehensive, practical guides written by Shahid Ali. Topics include calculating the real cost of personal loans, uncovering hidden credit card fees, debt elimination strategies, estimating emergency funds from living expenses, true car ownership costs, insurance policy reviews, and variable income retirement planning.',
     },
     {
       question: 'Do the blog guides require registration or a paid subscription?',
@@ -520,50 +550,34 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
             {activeInteractiveTool === 'word-counter' && <WordCounterCaseConverter />}
           </div>
 
-          {/* Quick Access to All 15 Tools */}
+          {/* Quick Access to All 25 Tools */}
           <div className="mt-12 p-6 bg-neutral-900 text-white rounded-2xl shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-800 pb-4 mb-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-widest text-amber-400">
-                  Expanded 15-Tool Suite
+                  Expanded 25-Tool Suite
                 </span>
                 <h3 className="text-xl font-bold text-white mt-0.5">
-                  Explore All 15 Browser Tools
+                  Explore All 25 Production-Ready Browser Tools
                 </h3>
               </div>
               <button
                 onClick={() => onNavigate('tools')}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 bg-white text-neutral-900 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer self-start sm:self-auto"
               >
-                <span>View Complete Tools Directory</span>
+                <span>View Complete Tools Hub</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-              {[
-                { id: 'color-palette' as ToolId, label: 'Color Palette' },
-                { id: 'lorem-ipsum' as ToolId, label: 'Lorem Ipsum' },
-                { id: 'word-counter' as ToolId, label: 'Text Cleaner' },
-                { id: 'password-generator' as ToolId, label: 'Password Gen' },
-                { id: 'text-sorter' as ToolId, label: 'Text Sorter' },
-                { id: 'find-replace' as ToolId, label: 'Find & Replace' },
-                { id: 'remove-line-breaks' as ToolId, label: 'Remove Line Breaks' },
-                { id: 'duplicate-remover' as ToolId, label: 'Duplicate Remover' },
-                { id: 'whitespace-remover' as ToolId, label: 'Whitespace Remover' },
-                { id: 'line-counter' as ToolId, label: 'Line Counter' },
-                { id: 'invisible-character-remover' as ToolId, label: 'Invisible Chars' },
-                { id: 'punctuation-cleaner' as ToolId, label: 'Punctuation Clean' },
-                { id: 'number-extractor' as ToolId, label: 'Number Extractor' },
-                { id: 'quote-remover' as ToolId, label: 'Quote Remover' },
-                { id: 'prefix-suffix-cleaner' as ToolId, label: 'Prefix & Suffix' },
-              ].map((item) => (
+              {TOOLS_DATA.map((tool) => (
                 <button
-                  key={item.id}
-                  onClick={() => onSelectTool(item.id)}
+                  key={tool.id}
+                  onClick={() => onSelectTool(tool.id)}
                   className="px-3 py-2 bg-neutral-800/80 hover:bg-neutral-700 text-neutral-200 hover:text-white rounded-lg text-xs font-medium text-left transition-colors flex items-center justify-between cursor-pointer border border-neutral-700/50"
                 >
-                  <span className="truncate">{item.label}</span>
+                  <span className="truncate">{tool.name}</span>
                   <ArrowRight className="w-3 h-3 text-neutral-400 shrink-0 ml-1" />
                 </button>
               ))}
@@ -824,10 +838,10 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
               <span>Practical Digital Guides</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
-              Latest Productivity & Workflow Articles
+              Latest Practical Guides
             </h2>
             <p className="text-sm sm:text-base text-neutral-600 mt-1 max-w-2xl">
-              Step-by-step guides for cleaning text, preparing spreadsheets, removing hidden characters, and improving your everyday digital workflow.
+              Step-by-step educational guides on calculating real loan costs, finding hidden credit card fees, building debt payment plans, comparing insurance quotes, and estimating retirement needs.
             </p>
           </div>
 
@@ -896,9 +910,9 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
                         onNavigate('blog');
                       }
                     }}
-                    className="inline-flex items-center gap-1 font-bold text-neutral-900 hover:text-emerald-700 transition-colors cursor-pointer group-hover:translate-x-0.5 transform duration-150 text-xs"
+                    className="inline-flex items-center gap-1 font-bold text-white bg-neutral-900 hover:bg-neutral-800 px-2.5 py-1 rounded-md transition-colors cursor-pointer text-xs"
                   >
-                    <span>Read</span>
+                    <span>Read More</span>
                     <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
@@ -916,7 +930,7 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
                 <span>20 In-Depth Practical Guides by Shahid Ali</span>
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                Covering text cleanup algorithms, spreadsheet sanitization, formatting error prevention, and browser privacy. Every guide includes copyable formulas, real examples, and integrated links to our 15 online tools.
+                Covering personal loans, credit card terms, emergency funds, auto costs, insurance audits, and retirement planning. Every guide includes real examples, calculation models, checklists, and objective financial clarity.
               </p>
             </div>
 

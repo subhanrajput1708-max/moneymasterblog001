@@ -28,7 +28,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
               <img
-                src="./logo.png"
+                src="/logo.png"
                 alt="Money Master Blog Logo"
                 className="h-9 w-9 aspect-square object-contain rounded-md bg-white p-0.5 shadow-xs"
                 referrerPolicy="no-referrer"
@@ -39,18 +39,16 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
 
             <p className="text-sm text-neutral-400 leading-relaxed max-w-md">
-              Money Master Blog provides simple, practical browser-based tools for working with text, colors, and everyday digital content. Fast, lightweight, and executed directly in your browser.
+              Money Master Blog provides simple, practical browser-based tools and comprehensive financial guides. Fast, lightweight, and executed directly in your browser.
             </p>
 
             <div className="pt-2 border-t border-neutral-800 space-y-2">
               <div className="flex items-start gap-2.5 text-xs text-neutral-400">
                 <UserCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-neutral-200 font-medium">Curated by Shahid Ali & Subhan Ali</span>
+                  <span className="text-neutral-200 font-medium">Written & Curated by Shahid Ali</span>
                   <p className="text-neutral-400 mt-0.5">
-                    Direct Support: <a href="tel:03678799545" className="text-neutral-300 hover:text-white underline">03678799545</a> (Calls & WhatsApp)
-                    <br />
-                    Gmail: <a href="mailto:subhanrajput1708@gmail.com" className="text-neutral-300 hover:text-white underline">subhanrajput1708@gmail.com</a>
+                    7 years of practical experience in digital content workflows & web utilities.
                   </p>
                 </div>
               </div>

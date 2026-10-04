@@ -4,27 +4,28 @@ import {
   ArrowRight,
   Clock,
   Calendar,
-  UserCheck,
   CheckCircle2,
   AlertTriangle,
   Info,
   Lightbulb,
-  Wrench,
-  Share2,
-  Copy,
-  Check,
-  BookOpen,
+  Calculator,
   ChevronRight,
   ShieldCheck,
   Layers,
-  Sparkles,
-  SlidersHorizontal
+  BookOpen,
+  Scale,
+  Compass,
+  ListChecks,
+  HelpCircle,
+  TrendingUp,
+  Award
 } from 'lucide-react';
 import { BlogArticle, PageId, ToolId } from '../../types';
 import { BLOG_ARTICLES, getRelatedArticles } from '../../data/blogArticles';
 import { CATEGORY_STYLES } from './BlogPage';
 import FaqSection from '../common/FaqSection';
 import { PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from '../../utils/routes';
+import { getToolById } from '../../data/toolsData';
 
 interface BlogArticlePageProps {
   article: BlogArticle;
@@ -33,33 +34,12 @@ interface BlogArticlePageProps {
   onSelectTool: (tool: ToolId) => void;
 }
 
-const TOOL_NAMES: Record<ToolId, string> = {
-  'color-palette': 'Color Palette Generator',
-  'lorem-ipsum': 'Lorem Ipsum Generator',
-  'word-counter': 'Word Counter & Case Converter',
-  'password-generator': 'Random Password Generator',
-  'text-sorter': 'Text Sorter',
-  'find-replace': 'Find & Replace Text',
-  'remove-line-breaks': 'Remove Line Breaks',
-  'duplicate-remover': 'Duplicate Line Remover',
-  'whitespace-remover': 'Whitespace Remover',
-  'line-counter': 'Text Line Counter',
-  'invisible-character-remover': 'Invisible Character Remover',
-  'punctuation-cleaner': 'Text Punctuation Cleaner',
-  'number-extractor': 'Text Number Extractor',
-  'quote-remover': 'Text Quote Remover',
-  'prefix-suffix-cleaner': 'Text Prefix & Suffix Cleaner'
-};
-
 export default function BlogArticlePage({
   article,
   onNavigate,
   onSelectArticle,
   onSelectTool
 }: BlogArticlePageProps) {
-  const [copiedLink, setCopiedLink] = useState(false);
-  const [copiedExampleIndex, setCopiedExampleIndex] = useState<number | null>(null);
-
   const catStyle = CATEGORY_STYLES[article.category];
   const relatedArticles = getRelatedArticles(article.slug, 3);
 
@@ -74,7 +54,7 @@ export default function BlogArticlePage({
     const existingScript = document.getElementById(articleScriptId);
     if (existingScript) existingScript.remove();
 
-    const faqEntities = article.faqs.map(faq => ({
+    const faqEntities = (article.faqs || []).map(faq => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: {
@@ -97,6 +77,7 @@ export default function BlogArticlePage({
             '@type': 'Person',
             name: 'Shahid Ali',
             jobTitle: 'Content Author & Web Utility Specialist',
+            description: '7 years of practical experience in digital content workflows & web utilities.',
             url: getCanonicalUrl(PAGE_PATHS.about)
           },
           publisher: {
@@ -132,18 +113,6 @@ export default function BlogArticlePage({
     };
   }, [article]);
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(getCanonicalUrl(getBloggerPostPath(article)));
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
-  };
-
-  const handleCopyText = (text: string, index: number) => {
-    navigator.clipboard.writeText(text);
-    setCopiedExampleIndex(index);
-    setTimeout(() => setCopiedExampleIndex(null), 2000);
-  };
-
   return (
     <article className="space-y-12 sm:space-y-16 pb-16">
       {/* 1. BREADCRUMBS NAVIGATION */}
@@ -175,7 +144,7 @@ export default function BlogArticlePage({
               }}
               className="hover:text-neutral-900 transition-colors cursor-pointer"
             >
-              Practical Guides & Blog
+              Financial Guides
             </a>
           </li>
           <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
@@ -187,7 +156,6 @@ export default function BlogArticlePage({
 
       {/* 2. ARTICLE HEADER */}
       <header className="space-y-6 max-w-4xl">
-        {/* Category & Meta Information */}
         <div className="flex flex-wrap items-center gap-3 text-xs">
           <span
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold tracking-wide uppercase border ${catStyle.bg} ${catStyle.text} ${catStyle.border}`}
@@ -203,70 +171,33 @@ export default function BlogArticlePage({
 
           <span className="text-neutral-300">•</span>
 
-          <div className="flex items-center gap-1 text-neutral-500">
+          <div className="flex items-center gap-1 text-neutral-500 font-medium">
             <Calendar className="w-3.5 h-3.5" />
             <span>Published {article.publishedDate}</span>
           </div>
         </div>
 
-        {/* H1 Heading */}
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-neutral-900 tracking-tight leading-tight">
           {article.h1}
         </h1>
 
-        {/* Excerpt / Lead Paragraph */}
         <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed font-normal">
           {article.excerpt}
         </p>
 
-        {/* Author & Share Bar */}
-        <div className="pt-4 pb-2 border-t border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-neutral-900 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-xs">
-              SA
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 text-sm font-bold text-neutral-900">
-                <span>Written by Shahid Ali</span>
-                <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-              </div>
-              <p className="text-xs text-neutral-500">
-                7 years of practical experience in digital content workflows & web utilities
-              </p>
-            </div>
+        {/* Author Byline */}
+        <div className="flex items-center gap-3 pt-2 text-xs sm:text-sm text-neutral-600 border-t border-neutral-100">
+          <div className="w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center font-bold text-xs shrink-0">
+            SA
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-semibold transition-colors cursor-pointer"
-              title="Copy link to guide"
-            >
-              {copiedLink ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Link Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5 text-neutral-600" />
-                  <span>Share Guide</span>
-                </>
-              )}
-            </button>
-
-            <button
-              onClick={() => onNavigate('blog')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-200 text-neutral-700 hover:bg-neutral-50 text-xs font-semibold transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>All Guides</span>
-            </button>
+          <div>
+            <span className="font-bold text-neutral-900">Written by Shahid Ali</span>
+            <span className="text-neutral-400 ml-2">7 years of practical experience in digital content workflows &amp; web utilities</span>
           </div>
         </div>
       </header>
 
-      {/* 3. QUICK ANSWER CALLOUT */}
+      {/* 3. QUICK PRACTICAL ANSWER */}
       <section id="quick-answer" className="max-w-4xl">
         <div className="p-6 sm:p-7 rounded-2xl bg-emerald-50/70 border border-emerald-200 shadow-2xs space-y-3">
           <div className="inline-flex items-center gap-2 text-xs font-extrabold text-emerald-900 uppercase tracking-wider">
@@ -279,20 +210,20 @@ export default function BlogArticlePage({
         </div>
       </section>
 
-      {/* 4. RELEVANT TOOL CALLOUT BANNER */}
-      {article.relevantToolIds.length > 0 && (
+      {/* 4. RELEVANT FINANCIAL TOOL CALLOUT (ONLY IF GENUINELY RELEVANT) */}
+      {article.relevantToolIds && article.relevantToolIds.length > 0 && (
         <section id="relevant-tools" className="max-w-4xl">
           <div className="p-5 sm:p-6 rounded-2xl bg-neutral-900 text-neutral-100 border border-neutral-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wider">
-                <Wrench className="w-3.5 h-3.5" />
-                <span>Try This Workflow In Browser</span>
+                <Calculator className="w-3.5 h-3.5" />
+                <span>Interactive Calculator Available</span>
               </div>
               <h4 className="text-base font-bold text-white">
-                Clean and format your data using our free tools
+                Calculate your custom numbers using our free browser tool
               </h4>
               <p className="text-xs text-neutral-300">
-                100% private client-side execution. Your text never leaves your browser.
+                100% client-side execution. Your financial figures remain entirely on your device.
               </p>
             </div>
 
@@ -303,7 +234,7 @@ export default function BlogArticlePage({
                   onClick={() => onSelectTool(toolId)}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white text-neutral-900 font-bold text-xs hover:bg-neutral-100 transition-colors cursor-pointer shadow-xs"
                 >
-                  <span>Open {TOOL_NAMES[toolId] || 'Tool'}</span>
+                  <span>Open {getToolById(toolId)?.name || 'Calculator'}</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>
               ))}
@@ -312,9 +243,43 @@ export default function BlogArticlePage({
         </section>
       )}
 
-      {/* 5. ARTICLE BODY SECTIONS */}
+      {/* 5. CORE CONCEPT & KEY DEFINITIONS */}
+      {article.coreConcept && (
+        <section id="core-concept" className="max-w-4xl">
+          <div className="p-6 sm:p-8 rounded-2xl bg-white border border-neutral-200 shadow-sm space-y-4">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-neutral-800 uppercase tracking-wider">
+              <BookOpen className="w-4 h-4 text-emerald-700" />
+              <span>Core Financial Concept</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-neutral-900">
+              {article.coreConcept.title}
+            </h2>
+            <p className="text-sm sm:text-base text-neutral-700 leading-relaxed">
+              {article.coreConcept.explanation}
+            </p>
+
+            {article.coreConcept.definitions && article.coreConcept.definitions.length > 0 && (
+              <div className="pt-4 border-t border-neutral-100">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
+                  Essential Terms Defined
+                </h3>
+                <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {article.coreConcept.definitions.map((def, dIdx) => (
+                    <div key={dIdx} className="p-3.5 rounded-xl bg-neutral-50 border border-neutral-200/80">
+                      <dt className="text-xs font-bold text-neutral-900 mb-1">{def.term}</dt>
+                      <dd className="text-xs text-neutral-600 leading-relaxed">{def.definition}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* 6. MAIN BODY SECTIONS */}
       <div className="max-w-4xl space-y-12 text-neutral-800">
-        {article.sections.map((section, sIndex) => (
+        {article.sections && article.sections.map((section, sIndex) => (
           <section key={sIndex} className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
               {section.heading}
@@ -332,7 +297,6 @@ export default function BlogArticlePage({
               </p>
             ))}
 
-            {/* Bullet Points */}
             {section.bulletPoints && section.bulletPoints.length > 0 && (
               <ul className="space-y-2.5 my-4 pl-2">
                 {section.bulletPoints.map((item, bIndex) => (
@@ -344,7 +308,6 @@ export default function BlogArticlePage({
               </ul>
             )}
 
-            {/* Numbered List */}
             {section.numberedList && section.numberedList.length > 0 && (
               <ol className="space-y-3.5 my-4">
                 {section.numberedList.map((item, nIndex) => (
@@ -358,7 +321,6 @@ export default function BlogArticlePage({
               </ol>
             )}
 
-            {/* Callout Box */}
             {section.callout && (
               <div
                 className={`p-5 rounded-xl border my-6 text-sm ${
@@ -384,151 +346,54 @@ export default function BlogArticlePage({
                 <p className="leading-relaxed">{section.callout.text}</p>
               </div>
             )}
-
-            {/* Before / After Example Box */}
-            {section.example && (
-              <div className="my-6 rounded-xl border border-neutral-300 overflow-hidden bg-white shadow-2xs">
-                <div className="px-4 py-2.5 bg-neutral-100 border-b border-neutral-200 font-bold text-xs text-neutral-800 flex items-center justify-between">
-                  <span>{section.example.title}</span>
-                  <span className="text-[11px] text-neutral-500 font-normal">Demonstration</span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
-                  {/* Before */}
-                  <div className="p-4 space-y-2 bg-rose-50/20">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-rose-700">
-                        Raw / Before
-                      </span>
-                    </div>
-                    <pre className="text-xs font-mono text-neutral-800 whitespace-pre-wrap bg-white p-3 rounded-lg border border-neutral-200 overflow-x-auto leading-relaxed">
-                      {section.example.before}
-                    </pre>
-                  </div>
-
-                  {/* After */}
-                  <div className="p-4 space-y-2 bg-emerald-50/20">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                        Cleaned / After
-                      </span>
-                      <button
-                        onClick={() => handleCopyText(section.example!.after, sIndex)}
-                        className="text-[11px] font-semibold text-neutral-600 hover:text-neutral-900 inline-flex items-center gap-1 cursor-pointer"
-                      >
-                        {copiedExampleIndex === sIndex ? (
-                          <>
-                            <Check className="w-3 h-3 text-emerald-600" />
-                            <span>Copied</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3 h-3" />
-                            <span>Copy Output</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                    <pre className="text-xs font-mono text-neutral-800 whitespace-pre-wrap bg-white p-3 rounded-lg border border-neutral-200 overflow-x-auto leading-relaxed">
-                      {section.example.after}
-                    </pre>
-                  </div>
-                </div>
-
-                {section.example.explanation && (
-                  <div className="px-4 py-2.5 bg-neutral-50 border-t border-neutral-200 text-xs text-neutral-600">
-                    <span className="font-bold text-neutral-800">What changed: </span>
-                    {section.example.explanation}
-                  </div>
-                )}
-              </div>
-            )}
           </section>
         ))}
 
-        {/* 6. ALTERNATIVE METHOD & DECISION GUIDE */}
-        {article.alternativeMethod && (
-          <section id="alternative-method" className="space-y-4 pt-6 border-t border-neutral-200">
-            <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-4 shadow-2xs">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-neutral-800 uppercase tracking-wider">
-                  <SlidersHorizontal className="w-4 h-4 text-neutral-700" />
-                  <span>Alternative Workflow & Decision Guide</span>
-                </div>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-800 font-semibold">
-                  Manual / Formula Method
-                </span>
-              </div>
-
-              <div>
-                <h3 className="text-lg sm:text-xl font-bold text-neutral-900">
-                  {article.alternativeMethod.title}
-                </h3>
-                <p className="text-sm text-neutral-700 mt-1 leading-relaxed">
-                  {article.alternativeMethod.description}
-                </p>
-              </div>
-
-              {article.alternativeMethod.steps && article.alternativeMethod.steps.length > 0 && (
-                <div className="space-y-2 pt-2">
-                  <span className="text-xs font-bold text-neutral-900 uppercase tracking-wider block">
-                    Execution Steps:
-                  </span>
-                  <ol className="space-y-2">
-                    {article.alternativeMethod.steps.map((step, sIdx) => (
-                      <li key={sIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-700">
-                        <span className="w-5 h-5 rounded bg-white border border-neutral-300 text-neutral-800 font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                          {sIdx + 1}
-                        </span>
-                        <span className="leading-relaxed">{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-
-              <div className="p-4 rounded-xl bg-white border border-neutral-200 text-xs sm:text-sm text-neutral-800 space-y-1">
-                <span className="font-bold text-neutral-900 block text-xs uppercase tracking-wider text-emerald-800">
-                  When to Choose Which Approach:
-                </span>
-                <p className="leading-relaxed text-neutral-700">
-                  {article.alternativeMethod.whenToChooseThis}
-                </p>
-              </div>
+        {/* 7. STEP-BY-STEP METHOD */}
+        {article.stepByStepMethod && (
+          <section id="step-by-step-method" className="space-y-6 pt-6 border-t border-neutral-200">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+                {article.stepByStepMethod.title}
+              </h2>
+              <p className="text-base text-neutral-600 mt-2">
+                {article.stepByStepMethod.description}
+              </p>
             </div>
-          </section>
-        )}
 
-        {/* 7. EDGE CASES WHERE THE OBVIOUS SOLUTION FAILS */}
-        {article.edgeCases && article.edgeCases.length > 0 && (
-          <section id="edge-cases" className="space-y-4 pt-6 border-t border-neutral-200">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
-              Edge Cases Where the Obvious Solution Fails
-            </h2>
-            <p className="text-base text-neutral-700">
-              Standard automated techniques often break down when encountering these tricky real-world scenarios:
-            </p>
+            <div className="space-y-4">
+              {article.stepByStepMethod.steps.map((step) => (
+                <div key={step.stepNumber} className="p-6 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-3">
+                  <div className="flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-xl bg-neutral-900 text-white font-extrabold text-sm flex items-center justify-center shrink-0">
+                      {step.stepNumber}
+                    </span>
+                    <h3 className="text-lg font-bold text-neutral-900">
+                      {step.stepName}
+                    </h3>
+                  </div>
 
-            <div className="grid grid-cols-1 gap-4 pt-2">
-              {article.edgeCases.map((ec, ecIdx) => (
-                <div
-                  key={ecIdx}
-                  className="p-5 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2 shadow-2xs"
-                >
-                  <div className="flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-neutral-900">
-                        Scenario: {ec.scenario}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-amber-950 mt-1">
-                        <strong className="font-semibold text-amber-900">Why simple automation fails:</strong>{' '}
-                        {ec.whyItFails}
-                      </p>
-                      <p className="text-xs sm:text-sm text-emerald-900 mt-1.5 pt-1.5 border-t border-amber-200/60">
-                        <strong className="font-semibold text-emerald-800">Correct handling:</strong>{' '}
-                        {ec.howToFix}
-                      </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm pt-2">
+                    <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/80">
+                      <strong className="block text-neutral-900 font-semibold mb-1">What to Check:</strong>
+                      <span className="text-neutral-700">{step.whatToCheck}</span>
+                    </div>
+                    <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/80">
+                      <strong className="block text-neutral-900 font-semibold mb-1">Why It Matters:</strong>
+                      <span className="text-neutral-700">{step.whyItMatters}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200/80 text-xs sm:text-sm">
+                    <div className="flex items-start gap-2">
+                      <Calculator className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-emerald-950 font-bold">Calculation / Evaluation: </strong>
+                        <span className="text-emerald-900">{step.howToCalculate}</span>
+                      </div>
+                    </div>
+                    <div className="mt-2 pt-2 border-t border-emerald-200/60 text-emerald-950 text-xs font-medium">
+                      <strong>Expected Result: </strong>{step.expectedResult}
                     </div>
                   </div>
                 </div>
@@ -537,29 +402,233 @@ export default function BlogArticlePage({
           </section>
         )}
 
-        {/* 8. WHEN NOT TO USE AUTOMATED TOOLS */}
-        {article.whenNotToUse && article.whenNotToUse.length > 0 && (
-          <section id="when-not-to-use" className="space-y-4 pt-6 border-t border-neutral-200">
-            <div className="p-6 rounded-2xl bg-rose-50/50 border border-rose-200 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-rose-900 uppercase tracking-wider">
-                <AlertTriangle className="w-4 h-4 text-rose-700" />
-                <span>Critical Precautions: When NOT to Use Automated Tools</span>
+        {/* 8. MULTIPLE ORIGINAL PRACTICAL EXAMPLES */}
+        {article.examples && article.examples.length > 0 && (
+          <section id="practical-examples" className="space-y-6 pt-6 border-t border-neutral-200">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+                Practical Calculation Examples
+              </h2>
+              <p className="text-base text-neutral-600 mt-2">
+                Realistic hypothetical scenarios demonstrating the real-world mathematical impact across different variables:
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {article.examples.map((ex, exIdx) => (
+                <div key={exIdx} className="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-xs">
+                  <div className="px-6 py-4 bg-neutral-900 text-white font-bold text-sm sm:text-base flex items-center justify-between">
+                    <span>{ex.title}</span>
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-neutral-800 text-emerald-400">
+                      Hypothetical Example
+                    </span>
+                  </div>
+
+                  <div className="p-6 space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                      <div className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span className="text-neutral-500 uppercase font-semibold block text-[10px]">Starting Amount</span>
+                        <span className="font-bold text-neutral-900">{ex.startingAmount}</span>
+                      </div>
+                      <div className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span className="text-neutral-500 uppercase font-semibold block text-[10px]">Rate</span>
+                        <span className="font-bold text-neutral-900">{ex.rate}</span>
+                      </div>
+                      <div className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span className="text-neutral-500 uppercase font-semibold block text-[10px]">Term</span>
+                        <span className="font-bold text-neutral-900">{ex.term}</span>
+                      </div>
+                      <div className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span className="text-neutral-500 uppercase font-semibold block text-[10px]">Fees</span>
+                        <span className="font-bold text-neutral-900">{ex.fees}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 font-mono text-xs text-neutral-800 whitespace-pre-wrap leading-relaxed">
+                      <span className="font-sans font-bold text-neutral-500 block mb-1 uppercase tracking-wider text-[11px]">
+                        Step-by-Step Calculation:
+                      </span>
+                      {ex.calculation}
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                      <span className="font-bold text-sm sm:text-base">Result: {ex.result}</span>
+                    </div>
+
+                    <div className="text-xs sm:text-sm text-neutral-700 bg-neutral-50/60 p-3.5 rounded-xl border border-neutral-200">
+                      <strong className="text-neutral-900">Interpretation: </strong>
+                      {ex.interpretation}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 9. COMPARISON TABLE */}
+        {article.comparisonTable && (
+          <section id="comparison-table" className="space-y-4 pt-6 border-t border-neutral-200">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight flex items-center gap-2">
+                <Scale className="w-6 h-6 text-neutral-800" />
+                {article.comparisonTable.title}
+              </h2>
+              {article.comparisonTable.description && (
+                <p className="text-sm text-neutral-600 mt-1">
+                  {article.comparisonTable.description}
+                </p>
+              )}
+            </div>
+
+            <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white shadow-xs">
+              <table className="min-w-full divide-y divide-neutral-200 text-xs sm:text-sm">
+                <thead className="bg-neutral-900 text-white font-bold">
+                  <tr>
+                    {article.comparisonTable.headers.map((h, hIdx) => (
+                      <th key={hIdx} className="px-4 py-3.5 text-left font-semibold tracking-wider">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-200 text-neutral-800">
+                  {article.comparisonTable.rows.map((row, rIdx) => (
+                    <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-neutral-50/70'}>
+                      {row.map((cell, cIdx) => (
+                        <td key={cIdx} className={`px-4 py-3 ${cIdx === 0 ? 'font-bold text-neutral-900' : ''}`}>
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {article.comparisonTable.footnote && (
+              <p className="text-xs text-neutral-500 italic">
+                {article.comparisonTable.footnote}
+              </p>
+            )}
+          </section>
+        )}
+
+        {/* 10. REAL-WORLD SCENARIOS */}
+        {article.realWorldScenarios && article.realWorldScenarios.length > 0 && (
+          <section id="real-world-scenarios" className="space-y-4 pt-6 border-t border-neutral-200">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+              Real-World Financial Scenarios
+            </h2>
+            <div className="space-y-4">
+              {article.realWorldScenarios.map((sc, scIdx) => (
+                <div key={scIdx} className="p-6 rounded-2xl bg-white border border-neutral-200 shadow-xs space-y-3">
+                  <h3 className="text-base sm:text-lg font-bold text-neutral-900">
+                    {sc.title}
+                  </h3>
+                  <div className="text-xs sm:text-sm text-neutral-600">
+                    <strong className="text-neutral-900 font-semibold">Borrower/Saver Profile: </strong>
+                    {sc.profile}
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-neutral-50 border border-neutral-200 text-xs sm:text-sm space-y-2">
+                    <p><strong className="text-neutral-900">Dilemma: </strong>{sc.dilemma}</p>
+                    <p><strong className="text-neutral-900">Analysis: </strong>{sc.evaluation}</p>
+                    <p><strong className="text-emerald-800">Recommended Action: </strong>{sc.recommendedAction}</p>
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold text-emerald-900 pt-1">
+                    Financial Outcome: {sc.financialOutcome}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 11. COMMON MISTAKES SECTION */}
+        {article.commonMistakes && article.commonMistakes.length > 0 && (
+          <section id="common-mistakes" className="space-y-4 pt-6 border-t border-neutral-200">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight flex items-center gap-2">
+              <AlertTriangle className="w-6 h-6 text-amber-600" />
+              Common Mistakes to Avoid
+            </h2>
+            <div className="space-y-4">
+              {article.commonMistakes.map((m, mIdx) => (
+                <div key={mIdx} className="p-5 rounded-2xl bg-white border border-neutral-200 shadow-2xs space-y-2.5">
+                  <h3 className="text-base font-bold text-neutral-900 flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-800 font-bold text-xs flex items-center justify-center shrink-0">
+                      ✕
+                    </span>
+                    Mistake: {m.mistake}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-600">
+                    <strong className="text-neutral-800 font-semibold">Why it happens: </strong>
+                    {m.whyItHappens}
+                  </p>
+                  <p className="text-xs sm:text-sm text-rose-900 bg-rose-50/60 p-2.5 rounded-lg border border-rose-100">
+                    <strong className="font-semibold">Financial Consequence: </strong>
+                    {m.consequence}
+                  </p>
+                  <p className="text-xs sm:text-sm text-emerald-950 bg-emerald-50/60 p-2.5 rounded-lg border border-emerald-100">
+                    <strong className="font-semibold text-emerald-900">Better Approach: </strong>
+                    {m.betterApproach}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 12. IMPORTANT EXCEPTIONS */}
+        {article.importantExceptions && article.importantExceptions.length > 0 && (
+          <section id="important-exceptions" className="space-y-4 pt-6 border-t border-neutral-200">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+              Important Exceptions &amp; Edge Cases
+            </h2>
+            <div className="space-y-3">
+              {article.importantExceptions.map((ex, exIdx) => (
+                <div key={exIdx} className="p-5 rounded-xl bg-amber-50/40 border border-amber-200 space-y-1.5 text-xs sm:text-sm">
+                  <h3 className="font-bold text-neutral-900">
+                    Exception: {ex.situation}
+                  </h3>
+                  <p className="text-amber-950">
+                    <strong className="font-semibold">Why the general method fails: </strong>
+                    {ex.whyGeneralMethodFails}
+                  </p>
+                  <p className="text-emerald-950 pt-1">
+                    <strong className="font-semibold text-emerald-900">How to handle: </strong>
+                    {ex.howToHandle}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 13. DECISION FRAMEWORK */}
+        {article.decisionFramework && (
+          <section id="decision-framework" className="space-y-4 pt-6 border-t border-neutral-200">
+            <div className="p-6 sm:p-8 rounded-2xl bg-neutral-900 text-white space-y-4">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                <Compass className="w-4 h-4" />
+                <span>Decision Framework</span>
               </div>
-              <p className="text-xs sm:text-sm text-rose-950 leading-relaxed">
-                Automated regex or batch string replacements are dangerous in certain data contexts. Never run blind automated transformations in these situations:
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                {article.decisionFramework.title}
+              </h2>
+              <p className="text-sm text-neutral-300">
+                {article.decisionFramework.description}
               </p>
 
-              <div className="space-y-3">
-                {article.whenNotToUse.map((wnt, wIdx) => (
-                  <div key={wIdx} className="p-4 rounded-xl bg-white border border-rose-200/80 space-y-1.5 text-xs sm:text-sm">
-                    <h5 className="font-bold text-neutral-900">
-                      Do not automate: {wnt.scenario}
-                    </h5>
-                    <p className="text-rose-900">
-                      <strong className="font-semibold">Risk:</strong> {wnt.reason}
-                    </p>
-                    <p className="text-neutral-700">
-                      <strong className="font-semibold text-emerald-800">Recommended approach:</strong> {wnt.alternativeRecommendation}
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-4 border-t border-neutral-800">
+                {article.decisionFramework.stages.map((stg, sIdx) => (
+                  <div key={sIdx} className="p-4 rounded-xl bg-neutral-800/80 border border-neutral-700 space-y-2">
+                    <span className="text-xs font-extrabold text-emerald-400 block uppercase">
+                      {stg.stage}
+                    </span>
+                    <h3 className="text-sm font-bold text-white leading-tight">
+                      {stg.action}
+                    </h3>
+                    <p className="text-xs text-neutral-300 leading-relaxed">
+                      {stg.details}
                     </p>
                   </div>
                 ))}
@@ -568,82 +637,12 @@ export default function BlogArticlePage({
           </section>
         )}
 
-        {/* 9. COMMON MISTAKES SECTION */}
-        {article.commonMistakes && article.commonMistakes.length > 0 && (
-          <section id="common-mistakes" className="space-y-4 pt-6 border-t border-neutral-200">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
-              Common Mistakes to Avoid
-            </h2>
-            <p className="text-base text-neutral-700">
-              When working through this workflow, watch out for these frequent missteps:
-            </p>
-
-            <div className="space-y-3 pt-2">
-              {article.commonMistakes.map((item, mIndex) => (
-                <div
-                  key={mIndex}
-                  className="p-4 sm:p-5 rounded-xl border border-neutral-200 bg-white space-y-2 shadow-2xs"
-                >
-                  <div className="flex items-start gap-2.5">
-                    <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-neutral-900">
-                        Mistake: {item.mistake}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-rose-800 mt-1">
-                        <strong className="font-medium">Consequence:</strong> {item.consequence}
-                      </p>
-                      <p className="text-xs sm:text-sm text-emerald-800 mt-1">
-                        <strong className="font-medium">Safe Solution:</strong> {item.solution}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 10. VERIFICATION METHOD & QUALITY INSPECTION */}
-        {article.verificationMethod && (
-          <section id="verification-method" className="space-y-4 pt-6 border-t border-neutral-200">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
-              How to Verify Your Results
-            </h2>
-            <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-4 shadow-2xs">
-              <h3 className="text-base font-bold text-neutral-900">
-                {article.verificationMethod.title}
-              </h3>
-
-              <div className="space-y-2">
-                <span className="text-xs font-bold text-neutral-700 uppercase tracking-wider block">
-                  Verification Steps:
-                </span>
-                <ul className="space-y-2">
-                  {article.verificationMethod.steps.map((vStep, vIdx) => (
-                    <li key={vIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-700">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span className="leading-relaxed">{vStep}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white border border-neutral-200 text-xs text-neutral-700 space-y-1">
-                <span className="font-bold text-neutral-900 block text-[11px] uppercase tracking-wider">
-                  Quality Assurance Check:
-                </span>
-                <p className="leading-relaxed">{article.verificationMethod.sampleCheck}</p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* 11. PRACTICAL CHECKLIST */}
+        {/* 14. PRACTICAL CHECKLIST */}
         {article.checklist && article.checklist.length > 0 && (
           <section id="practical-checklist" className="space-y-4 pt-6 border-t border-neutral-200">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
-              Practical Step-by-Step Checklist
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight flex items-center gap-2">
+              <ListChecks className="w-6 h-6 text-emerald-600" />
+              Actionable Implementation Checklist
             </h2>
             <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-3">
               {article.checklist.map((item, cIndex) => (
@@ -656,29 +655,67 @@ export default function BlogArticlePage({
           </section>
         )}
 
-        {/* 12. PRIVACY & LOCAL PROCESSING ASSURANCE */}
-        <section id="security-assurance" className="p-5 rounded-2xl bg-neutral-100 border border-neutral-200 text-xs sm:text-sm text-neutral-700 space-y-2">
-          <div className="flex items-center gap-2 font-bold text-neutral-900">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Data Privacy & Client-Side Execution Guarantee</span>
+        {/* 15. DETAILED FAQS ACCORDION */}
+        {article.faqs && article.faqs.length > 0 && (
+          <div id="article-faqs" className="pt-6 border-t border-neutral-200">
+            <FaqSection
+              title={`Frequently Asked Questions: ${article.title}`}
+              subtitle="Clear, verified answers to common questions and practical financial scenarios."
+              items={article.faqs}
+            />
           </div>
-          <p className="leading-relaxed text-neutral-600">
-            {article.privacyGuidance ||
-              'When executing the steps in this guide using Money Master Blog tools, all text operations take place entirely inside your web browser’s local memory. No text, names, emails, numbers, or documents are ever sent to, logged by, or stored on external servers.'}
-          </p>
+        )}
+
+        {/* 16. CONCLUSION & NEXT STEPS */}
+        {article.conclusion && (
+          <section id="conclusion" className="p-6 sm:p-8 rounded-2xl bg-white border border-neutral-200 shadow-sm space-y-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-neutral-900">
+              Conclusion &amp; Key Takeaways
+            </h2>
+            <p className="text-base text-neutral-700 leading-relaxed">
+              {article.conclusion.summary}
+            </p>
+            {article.conclusion.nextSteps && article.conclusion.nextSteps.length > 0 && (
+              <div className="pt-4 border-t border-neutral-100">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-2">
+                  Actionable Next Steps:
+                </h3>
+                <ul className="space-y-2 text-sm text-neutral-700">
+                  {article.conclusion.nextSteps.map((step, nsIdx) => (
+                    <li key={nsIdx} className="flex items-start gap-2">
+                      <span className="text-emerald-600 font-bold">•</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* 17. AUTHOR BIO BOX */}
+        <section id="author-bio" className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-neutral-900 text-white font-extrabold text-lg flex items-center justify-center shrink-0">
+            SA
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-neutral-900">
+              Written by Shahid Ali
+            </h3>
+            <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+              7 years of practical experience in digital content workflows &amp; web utilities. Focused on building transparent, client-side tools and educational financial guides that empower readers to make data-driven personal finance decisions.
+            </p>
+          </div>
         </section>
 
-        {/* 13. DETAILED FAQS ACCORDION */}
-        <div id="article-faqs">
-          <FaqSection
-            title={`Frequently Asked Questions About ${article.title}`}
-            subtitle="Answers to common practical questions, edge cases, and troubleshooting steps."
-            items={article.faqs}
-          />
+        {/* 18. EDUCATIONAL DISCLAIMER */}
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900 leading-relaxed">
+          <strong>Educational Disclaimer: </strong>
+          This guide is published strictly for educational and informational purposes. It does not constitute personalized financial, credit, legal, insurance, or investment advice. Numerical examples are hypothetical models for conceptual illustration. Interest rates, loan eligibility, tax policies, and insurance regulations vary according to local jurisdictions and individual underwriter guidelines.
         </div>
       </div>
 
-      {/* 10. PREVIOUS / NEXT ARTICLE NAVIGATION */}
+      {/* 19. PREVIOUS / NEXT ARTICLE NAVIGATION */}
       <section id="article-pagination" className="max-w-4xl pt-8 border-t border-neutral-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {prevArticle ? (
@@ -729,15 +766,15 @@ export default function BlogArticlePage({
         </div>
       </section>
 
-      {/* 11. RELATED GUIDES */}
+      {/* 20. RELATED FINANCIAL GUIDES */}
       <section id="related-guides" className="max-w-4xl pt-8 border-t border-neutral-200 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-xl sm:text-2xl font-extrabold text-neutral-900 tracking-tight">
-              Related Practical Guides
+              Related Financial Guides
             </h3>
             <p className="text-xs sm:text-sm text-neutral-500 mt-1">
-              Explore more actionable guides in {article.category} and related productivity topics.
+              Explore more actionable guides in {article.category} and practical wealth management.
             </p>
           </div>
           <a

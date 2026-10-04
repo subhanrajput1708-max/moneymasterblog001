@@ -27,31 +27,31 @@ export const CATEGORY_STYLES: Record<
   BlogCategory,
   { bg: string; text: string; border: string; dot: string }
 > = {
-  'Text Cleaning': {
+  'Personal Loans': {
     bg: 'bg-blue-50',
     text: 'text-blue-800',
     border: 'border-blue-200',
     dot: 'bg-blue-600'
   },
-  'Productivity': {
+  'Credit & Debt': {
+    bg: 'bg-rose-50',
+    text: 'text-rose-800',
+    border: 'border-rose-200',
+    dot: 'bg-rose-600'
+  },
+  'Savings & Budgeting': {
     bg: 'bg-emerald-50',
     text: 'text-emerald-800',
     border: 'border-emerald-200',
     dot: 'bg-emerald-600'
   },
-  'Data Preparation': {
+  'Insurance & Auto': {
     bg: 'bg-amber-50',
     text: 'text-amber-800',
     border: 'border-amber-200',
     dot: 'bg-amber-600'
   },
-  'Online Work': {
-    bg: 'bg-sky-50',
-    text: 'text-sky-800',
-    border: 'border-sky-200',
-    dot: 'bg-sky-600'
-  },
-  'Digital Organization': {
+  'Retirement & Goals': {
     bg: 'bg-purple-50',
     text: 'text-purple-800',
     border: 'border-purple-200',
@@ -88,11 +88,11 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-neutral-900 tracking-tight leading-tight">
-            Practical Guides for Everyday Digital Work
+            Practical Personal Finance Guides &amp; Money Resources
           </h1>
 
           <p className="mt-4 text-base sm:text-lg text-neutral-600 leading-relaxed max-w-3xl">
-            Welcome to the Money Master Blog resource library. Here you will find detailed, step-by-step guides for cleaning, organizing, preparing, converting, and formatting digital text, spreadsheets, and everyday business workflows. Every guide is written with real-world scenarios, clear before-and-after examples, and verified client-side browser techniques.
+            Welcome to the Money Master Blog resource library. Here you will find practical, step-by-step guides on personal loans, credit card terms, debt payoff strategies, emergency funds, car ownership calculations, insurance evaluation, and long-term financial planning. Every guide is written with real-world scenarios, clear calculations, and actionable frameworks.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-neutral-500 pt-4 border-t border-neutral-100">
@@ -105,7 +105,7 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
             <span>•</span>
             <div>Written by Shahid Ali (7 Years Experience)</div>
             <span>•</span>
-            <div>Integrated With 15 Free Browser Tools</div>
+            <div>Integrated With 25 Free Online Tools</div>
           </div>
         </div>
       </section>
@@ -230,6 +230,11 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                       </div>
                     </div>
 
+                    {/* Author line */}
+                    <div className="text-xs text-neutral-500 font-medium">
+                      <span>Written by <strong className="text-neutral-700">Shahid Ali</strong></span>
+                    </div>
+
                     {/* Title */}
                     <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug tracking-tight group-hover:text-neutral-700 transition-colors">
                       <a
@@ -262,7 +267,7 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                     </div>
                   </div>
 
-                  {/* Bottom Footer: Date & Read CTA */}
+                  {/* Bottom Footer: Date & Read More CTA */}
                   <div className="px-6 py-4 bg-neutral-50/75 border-t border-neutral-100 flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5 text-neutral-500">
                       <Calendar className="w-3.5 h-3.5" />
@@ -277,9 +282,9 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                           onSelectArticle(article.slug);
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 font-bold text-neutral-900 hover:text-emerald-700 transition-colors cursor-pointer group-hover:translate-x-0.5 transform duration-150"
+                      className="inline-flex items-center gap-1.5 font-bold text-white bg-neutral-900 hover:bg-neutral-800 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer group-hover:shadow-xs"
                     >
-                      <span>Read Guide</span>
+                      <span>Read More</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                   </div>
@@ -302,7 +307,7 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
               Ready to clean your text or prepare your list right now?
             </h3>
             <p className="text-sm text-neutral-300 leading-relaxed">
-              Every workflow explained in our guides can be completed directly on Money Master Blog using our suite of 15 lightweight, browser-based tools. No signup, no fees, and 100% private in-browser processing.
+              Every calculation and workflow explained in our guides can be supported directly on Money Master Blog using our suite of 25 lightweight, browser-based tools. No signup, no fees, and instant calculations.
             </p>
           </div>
 
@@ -311,7 +316,7 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
               onClick={() => onNavigate('tools')}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-neutral-900 font-bold text-sm hover:bg-neutral-100 transition-all cursor-pointer shadow-sm"
             >
-              <span>Explore All 15 Tools</span>
+              <span>Explore All 25 Online Tools</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

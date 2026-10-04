@@ -91,7 +91,7 @@ export default function ContactUsPage({ onNavigate }: ContactUsPageProps) {
     {
       question: 'Can I suggest a brand new browser-based tool to be developed?',
       answer:
-        'Yes! Many of our 15 utilities originated from everyday workflow challenges faced by content writers, designers, and students. If you have an idea for a text converter, calculator, or design assistant that can run client-side in standard web browsers, let us know in detail.',
+        'Yes! Many of our 25 tools and calculators originated from everyday workflow challenges faced by readers, writers, and digital workers. If you have an idea for a financial calculator, text converter, or utility that can run client-side in standard web browsers, let us know in detail.',
     },
     {
       question: 'What details should I provide when reporting an erroneous calculation or bug?',

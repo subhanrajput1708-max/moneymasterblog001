@@ -22,7 +22,7 @@ export default function AboutUsPage({ onNavigate }: AboutUsPageProps) {
     {
       question: 'What is the purpose of the Money Master Blog educational guides and articles?',
       answer:
-        'The Blog section contains 20 comprehensive, practical guides curated by Shahid Ali. Rather than generic filler content, each article tackles a real-world friction point—such as fixing broken line breaks in PDFs, removing invisible Unicode zero-width spaces, sorting messy name lists, preparing clean CSV data, and preventing common text formatting blunders. Each guide provides clear step-by-step instructions, troubleshooting checklists, and direct links to the relevant client-side tools.',
+        'The Blog section contains 20 comprehensive, practical guides curated by Shahid Ali. Rather than generic filler content, each article tackles a real-world financial decision—such as calculating the true borrowing cost of personal loans, identifying hidden credit card fees, building income-based debt elimination plans, establishing emergency funds, estimating car ownership costs, reviewing insurance policies for deductibles, and calculating retirement savings with variable income. Each guide provides clear step-by-step instructions, calculation examples, and practical checklists.',
     },
     {
       question: 'Are the 20 blog guides free to read without registration or paywalls?',
@@ -30,9 +30,9 @@ export default function AboutUsPage({ onNavigate }: AboutUsPageProps) {
         'Yes. All 20 guides and future articles on Money Master Blog are 100% free and open access. There are no paywalls, no forced email subscriptions, no reading limits, and no account requirements. Anyone can read, learn, and reference the techniques freely.',
     },
     {
-      question: 'How do the blog guides integrate with the 15 browser tools?',
+      question: 'How do the blog guides integrate with the 25 browser tools?',
       answer:
-        'Each guide is designed to pair directly with our suite of 15 browser tools. When an article explains a challenge (for example, cleaning up messy clipboard quotes or stripping extra whitespace), it includes practical examples, spreadsheet formulas, and an integrated link to open the exact tool needed right in your browser.',
+        'Each guide is designed to pair directly with our suite of 25 browser tools. When an article explains a challenge (for example, evaluating loan payments, checking tax percentages, or splitting bills), it includes practical examples, transparent formulas, and an integrated link to open the exact tool needed right in your browser.',
     },
     {
       question: 'Does Money Master Blog claim any official corporate certifications or awards?',
@@ -74,10 +74,10 @@ export default function AboutUsPage({ onNavigate }: AboutUsPageProps) {
           About Money Master Blog
         </span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight mt-1">
-          Simple Utilities, Honest Craft
+          Practical Guides, Honest Craft
         </h1>
         <p className="mt-3 text-base sm:text-lg text-neutral-600 leading-relaxed">
-          Money Master Blog was founded with a straightforward mission: to provide simple, practical browser-based tools for working with text, colors, and everyday digital content without software bloat or invasive ads.
+          Money Master Blog was founded with a straightforward mission: to provide practical, educational personal finance guides, useful calculation tools, and lightweight web utilities without software bloat or invasive ads.
         </p>
       </div>
 
@@ -290,47 +290,47 @@ export default function AboutUsPage({ onNavigate }: AboutUsPageProps) {
         </div>
 
         <p className="text-sm text-neutral-700 leading-relaxed">
-          In addition to our suite of 15 client-side browser utilities, Money Master Blog publishes <strong>20 comprehensive practical guides</strong> curated by author Shahid Ali. Drawing directly upon 7 years of hands-on digital troubleshooting, these articles provide step-by-step methodologies for solving real everyday computer headaches.
+          In addition to our suite of 25 client-side browser tools and calculators, Money Master Blog publishes <strong>20 comprehensive practical financial guides</strong> curated by author Shahid Ali. Drawing directly upon 7 years of hands-on digital and workflow troubleshooting, these articles provide step-by-step methodologies for making informed borrowing, credit, and savings decisions.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200/80 space-y-1.5">
             <div className="flex items-center gap-2 text-xs font-bold text-neutral-900">
               <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-              <span>Text Formatting & Cleanup</span>
+              <span>Personal Loans &amp; Borrowing</span>
             </div>
             <p className="text-xs text-neutral-600 leading-relaxed">
-              Step-by-step techniques to strip PDF line break glitches, fix curly smart quotes for code terminals, and format proper title casing.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200/80 space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-bold text-neutral-900">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span>Spreadsheet & Data Preparation</span>
-            </div>
-            <p className="text-xs text-neutral-600 leading-relaxed">
-              Formulas and workflows to sanitize raw CSV datasets, deduplicate messy contact lists, and remove hidden zero-width Unicode characters.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200/80 space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-bold text-neutral-900">
-              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-              <span>Design & Typography Practice</span>
-            </div>
-            <p className="text-xs text-neutral-600 leading-relaxed">
-              Visual contrast essentials (WCAG AA/AAA standards), dummy copy (Lorem Ipsum) dos and don'ts, and word count target management.
+              Step-by-step techniques to calculate true loan costs, evaluate origination fees, compare competing APRs, and lower monthly payments.
             </p>
           </div>
 
           <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200/80 space-y-1.5">
             <div className="flex items-center gap-2 text-xs font-bold text-neutral-900">
               <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-              <span>Security & Client-Side Privacy</span>
+              <span>Credit Cards &amp; Debt Payoff</span>
             </div>
             <p className="text-xs text-neutral-600 leading-relaxed">
-              CSPRNG password generation heuristics, browser memory sanitation, and how client-side computing guarantees complete data safety.
+              Auditing hidden card fees, understanding minimum payment amortization traps, and building actionable debt reduction plans from real income.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200/80 space-y-1.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-neutral-900">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Savings &amp; Emergency Planning</span>
+            </div>
+            <p className="text-xs text-neutral-600 leading-relaxed">
+              Formulas to calculate emergency funds from essential expenses, structuring sinking funds for annual bills, and evaluating high-yield accounts.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200/80 space-y-1.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-neutral-900">
+              <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+              <span>Insurance, Auto &amp; Future Goals</span>
+            </div>
+            <p className="text-xs text-neutral-600 leading-relaxed">
+              Calculating true car ownership costs, evaluating insurance policy deductibles, and estimating retirement savings with variable yearly income.
             </p>
           </div>
         </div>

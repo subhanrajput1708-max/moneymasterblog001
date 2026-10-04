@@ -27,31 +27,31 @@ export const CATEGORY_STYLES: Record<
   BlogCategory,
   { bg: string; text: string; border: string; dot: string }
 > = {
-  'Text Cleaning': {
+  'Personal Loans': {
     bg: 'bg-blue-50',
     text: 'text-blue-800',
     border: 'border-blue-200',
     dot: 'bg-blue-600'
   },
-  'Productivity': {
+  'Credit & Debt': {
+    bg: 'bg-rose-50',
+    text: 'text-rose-800',
+    border: 'border-rose-200',
+    dot: 'bg-rose-600'
+  },
+  'Savings & Budgeting': {
     bg: 'bg-emerald-50',
     text: 'text-emerald-800',
     border: 'border-emerald-200',
     dot: 'bg-emerald-600'
   },
-  'Data Preparation': {
+  'Insurance & Auto': {
     bg: 'bg-amber-50',
     text: 'text-amber-800',
     border: 'border-amber-200',
     dot: 'bg-amber-600'
   },
-  'Online Work': {
-    bg: 'bg-sky-50',
-    text: 'text-sky-800',
-    border: 'border-sky-200',
-    dot: 'bg-sky-600'
-  },
-  'Digital Organization': {
+  'Retirement & Goals': {
     bg: 'bg-purple-50',
     text: 'text-purple-800',
     border: 'border-purple-200',
@@ -230,6 +230,11 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                       </div>
                     </div>
 
+                    {/* Author line */}
+                    <div className="text-xs text-neutral-500 font-medium">
+                      <span>Written by <strong className="text-neutral-700">Shahid Ali</strong></span>
+                    </div>
+
                     {/* Title */}
                     <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug tracking-tight group-hover:text-neutral-700 transition-colors">
                       <a
@@ -262,7 +267,7 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                     </div>
                   </div>
 
-                  {/* Bottom Footer: Date & Read CTA */}
+                  {/* Bottom Footer: Date & Read More CTA */}
                   <div className="px-6 py-4 bg-neutral-50/75 border-t border-neutral-100 flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5 text-neutral-500">
                       <Calendar className="w-3.5 h-3.5" />
@@ -277,9 +282,9 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
                           onSelectArticle(article.slug);
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 font-bold text-neutral-900 hover:text-emerald-700 transition-colors cursor-pointer group-hover:translate-x-0.5 transform duration-150"
+                      className="inline-flex items-center gap-1.5 font-bold text-white bg-neutral-900 hover:bg-neutral-800 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer group-hover:shadow-xs"
                     >
-                      <span>Read Guide</span>
+                      <span>Read More</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                   </div>

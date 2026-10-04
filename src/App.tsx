@@ -17,6 +17,7 @@ import DisclaimerPage from './components/pages/DisclaimerPage';
 import BlogPage from './components/pages/BlogPage';
 import BlogArticlePage from './components/pages/BlogArticlePage';
 import { getArticleBySlug, BLOG_ARTICLES } from './data/blogArticles';
+import { getToolById } from './data/toolsData';
 import { parseCurrentRoute, PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from './utils/routes';
 
 interface PageSeoMeta {
@@ -26,19 +27,19 @@ interface PageSeoMeta {
 
 const PAGE_SEO: Record<PageId, PageSeoMeta> = {
   home: {
-    title: 'Money Master Blog – Simple Online Tools for Everyday Tasks',
+    title: 'Money Master Blog | Practical Money Guides & Financial Tools',
     description:
-      'Money Master Blog provides simple online tools for generating color palettes, creating placeholder text, cleaning text, and completing everyday digital tasks.',
+      'Explore practical money guides, financial calculators, saving and budgeting tips, loan and credit explanations, and useful online tools at Money Master Blog.',
   },
   tools: {
-    title: 'Online Tools – Money Master Blog',
+    title: 'Free Online Financial & Utility Tools (25 Tools) – Money Master Blog',
     description:
-      'Explore free, lightweight browser-based tools on Money Master Blog including our Color Palette Generator, Text Cleaner, and Lorem Ipsum Generator.',
+      'Explore 25 free, lightweight browser-based calculators and utilities on Money Master Blog including loan payment, interest, percentage, and everyday digital tools.',
   },
   blog: {
-    title: 'Practical Guides & Digital Productivity Tips – Money Master Blog',
+    title: 'Practical Personal Finance Guides & Money Resources – Money Master Blog',
     description:
-      'Browse practical guides on cleaning text, preparing spreadsheets, removing hidden characters, and improving digital productivity workflows.',
+      'Browse comprehensive, reader-first guides on personal loans, credit card fees, debt repayment, emergency funds, insurance evaluation, and budgeting.',
   },
   'blog-article': {
     title: 'Practical Productivity Guide – Money Master Blog',
@@ -75,7 +76,9 @@ const PAGE_SEO: Record<PageId, PageSeoMeta> = {
 export default function App() {
   const initialRoute = parseCurrentRoute();
   const [currentPage, setCurrentPage] = useState<PageId>(initialRoute.page);
-  const [selectedTool, setSelectedTool] = useState<ToolId>('color-palette');
+  const [selectedTool, setSelectedTool] = useState<ToolId | null>(
+    (initialRoute.toolId as ToolId) || null
+  );
   const [selectedArticleSlug, setSelectedArticleSlug] = useState<string | null>(initialRoute.articleSlug);
 
   const currentArticle = selectedArticleSlug ? getArticleBySlug(selectedArticleSlug) : null;
@@ -93,6 +96,9 @@ export default function App() {
           if (art) {
             cleanUrl = getBloggerPostPath(art);
           }
+        } else if (hash.startsWith('tools/') || hash.startsWith('tool/')) {
+          const tId = hash.replace(/^(tools|tool)\//, '');
+          cleanUrl = `/tools/${tId}.html`;
         } else if (hash === 'tools') {
           cleanUrl = PAGE_PATHS.tools;
         } else if (hash === 'blog') {
@@ -121,6 +127,9 @@ export default function App() {
       const route = parseCurrentRoute();
       setCurrentPage(route.page);
       setSelectedArticleSlug(route.articleSlug);
+      if (route.toolId) {
+        setSelectedTool(route.toolId as ToolId);
+      }
     };
 
     window.addEventListener('popstate', handleUrlChange);
@@ -142,6 +151,18 @@ export default function App() {
       title = `${currentArticle.title} – Money Master Blog`;
       description = currentArticle.metaDescription;
       canonicalPath = getBloggerPostPath(currentArticle);
+    } else if (currentPage === 'tools' && selectedTool) {
+      const toolMeta = getToolById(selectedTool);
+      if (toolMeta) {
+        title = `${toolMeta.seoTitle} – Money Master Blog`;
+        description = toolMeta.metaDescription;
+        canonicalPath = `/tools/${toolMeta.id}.html`;
+      } else {
+        const seo = PAGE_SEO.tools;
+        title = seo.title;
+        description = seo.description;
+        canonicalPath = PAGE_PATHS.tools;
+      }
     } else {
       const seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
       title = seo.title;
@@ -175,12 +196,15 @@ export default function App() {
       document.head.appendChild(canonicalEl);
     }
     canonicalEl.setAttribute('href', getCanonicalUrl(canonicalPath));
-  }, [currentPage, currentArticle]);
+  }, [currentPage, currentArticle, selectedTool]);
 
   const handleNavigate = (page: PageId) => {
     setCurrentPage(page);
     if (page === 'blog') {
       setSelectedArticleSlug(null);
+    }
+    if (page === 'tools') {
+      setSelectedTool(null);
     }
     const targetPath = PAGE_PATHS[page] || '/';
     try {
@@ -194,8 +218,9 @@ export default function App() {
   const handleSelectTool = (tool: ToolId) => {
     setSelectedTool(tool);
     setCurrentPage('tools');
+    const targetPath = `/tools/${tool}.html`;
     try {
-      window.history.pushState({}, '', PAGE_PATHS.tools);
+      window.history.pushState({}, '', targetPath);
     } catch {
       // ignore
     }
@@ -232,7 +257,7 @@ export default function App() {
           />
         )}
         {currentPage === 'tools' && (
-          <ToolsPage initialTool={selectedTool} />
+          <ToolsPage initialTool={selectedTool} onSelectTool={handleSelectTool} />
         )}
         {currentPage === 'blog' && (
           <BlogPage
