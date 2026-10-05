@@ -329,30 +329,31 @@ export default function ToolsPage({ initialTool, onSelectTool }: ToolsPageProps)
         {/* Active Tool View */}
         {activeTool ? (
           <div className="space-y-10">
-            {/* Breadcrumb & Back button */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-neutral-500">
-                <a href="/" className="hover:text-neutral-900">Home</a>
+            {/* Top Back Bar & Breadcrumb */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-1 pb-3 border-b border-neutral-200">
+              <button
+                type="button"
+                onClick={handleBackToDirectory}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow-xs group"
+                aria-label="Back to All 25 Tools"
+              >
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                <span>Back to All 25 Tools</span>
+              </button>
+
+              <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
+                <a href="/" className="hover:text-black">Home</a>
                 <span>/</span>
                 <button
                   type="button"
                   onClick={handleBackToDirectory}
-                  className="hover:text-neutral-900 underline"
+                  className="hover:text-black font-medium cursor-pointer"
                 >
                   Online Tools
                 </button>
                 <span>/</span>
-                <span className="font-semibold text-neutral-900">{activeTool.name}</span>
+                <span className="font-semibold text-black">{activeTool.name}</span>
               </nav>
-
-              <button
-                type="button"
-                onClick={handleBackToDirectory}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-neutral-300 bg-white hover:bg-neutral-100 text-xs font-semibold text-neutral-800 transition"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                Back to All 25 Tools
-              </button>
             </div>
 
             {/* Tool Heading & Intro */}

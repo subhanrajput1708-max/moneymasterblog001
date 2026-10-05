@@ -630,12 +630,20 @@ function renderIndividualToolPageBody(tool: ToolMeta): string {
 
   return `
   ${renderHeader()}
+  <div style="max-width: 900px; margin: 0 auto; padding: 14px 16px 0 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <a href="/p/tools.html" style="display: inline-flex; align-items: center; gap: 8px; background: #000000; color: #ffffff; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+      ← Back to All 25 Tools
+    </a>
+    <a href="/p/blog-page.html" style="font-size: 13px; color: #4b5563; font-weight: 500; text-decoration: none;">
+      Explore Financial Guides →
+    </a>
+  </div>
   ${renderBreadcrumbNav([
     { name: 'Home', url: '/' },
     { name: 'Online Tools', url: '/p/tools.html' },
     { name: tool.name },
   ])}
-  <main style="max-width: 900px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
+  <main style="max-width: 900px; margin: 0 auto; padding: 12px 16px 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
     <!-- TOOL HEADER -->
     <header style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
       <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
@@ -646,7 +654,7 @@ function renderIndividualToolPageBody(tool: ToolMeta): string {
       <h1 style="font-size: 32px; font-weight: 800; color: #111827; margin: 0 0 12px 0;">${escapeXml(tool.h1)}</h1>
       <p style="font-size: 17px; color: #4b5563; line-height: 1.6; margin: 0 0 16px 0;">${escapeXml(tool.explanation)}</p>
       <div>
-        <a href="/p/tools.html" style="color: #2563eb; font-weight: 600; font-size: 14px; text-decoration: none;">← Back to All 25 Tools Directory</a>
+        <a href="/p/tools.html" style="display: inline-flex; align-items: center; gap: 6px; color: #111827; font-weight: 700; font-size: 14px; text-decoration: none;">← Back to All 25 Tools Directory</a>
       </div>
     </header>
 
@@ -784,12 +792,20 @@ function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
   const related = getRelatedArticles(article.slug, 3);
   return `
   ${renderHeader()}
+  <div style="max-width: 860px; margin: 0 auto; padding: 14px 16px 0 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <a href="/p/blog-page.html" style="display: inline-flex; align-items: center; gap: 8px; background: #000000; color: #ffffff; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+      ← Back to All Articles
+    </a>
+    <a href="/p/tools.html" style="font-size: 13px; color: #4b5563; font-weight: 500; text-decoration: none;">
+      Explore 25 Online Tools →
+    </a>
+  </div>
   ${renderBreadcrumbNav([
     { name: 'Home', url: '/' },
     { name: 'Financial Guides', url: '/p/blog-page.html' },
     { name: article.title },
   ])}
-  <main style="max-width: 860px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
+  <main style="max-width: 860px; margin: 0 auto; padding: 12px 16px 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
     <article>
       <header style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
         <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 14px; color: #6b7280; margin-bottom: 12px;">
@@ -1113,6 +1129,15 @@ function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
           `).join('')}
         </div>
       </section>
+
+      <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <a href="/p/blog-page.html" style="display: inline-flex; align-items: center; gap: 8px; background: #000000; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; text-decoration: none;">
+          ← Back to All Financial Guides
+        </a>
+        <a href="/p/tools.html" style="display: inline-flex; align-items: center; gap: 8px; background: #f3f4f6; color: #111827; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none;">
+          Explore 25 Online Tools →
+        </a>
+      </div>
     </article>
   </main>
   ${renderFooter()}`;

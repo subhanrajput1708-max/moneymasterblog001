@@ -105,7 +105,16 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
             <span>•</span>
             <div>Written by Shahid Ali (7 Years Experience)</div>
             <span>•</span>
-            <div>Integrated With 25 Free Online Tools</div>
+            <a
+              href="/p/editorial-policy.html"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('editorial-policy');
+              }}
+              className="font-semibold text-emerald-800 hover:underline"
+            >
+              Audited for 2026 • Editorial Standards &rarr;
+            </a>
           </div>
         </div>
       </section>
@@ -121,7 +130,7 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search guides by keyword, topic, or problem (e.g., PDF, spreadsheet, duplicates)..."
+              placeholder="Search guides by topic or problem (e.g., personal loan, credit card, APR, emergency fund)..."
               className="w-full pl-10 pr-10 py-2.5 text-sm bg-white border border-neutral-300 rounded-xl text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all shadow-2xs"
             />
             {searchQuery && (

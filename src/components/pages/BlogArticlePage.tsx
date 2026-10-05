@@ -148,44 +148,56 @@ export default function BlogArticlePage({
 
   return (
     <article className="space-y-12 sm:space-y-16 pb-16">
-      {/* 1. BREADCRUMBS NAVIGATION */}
-      <nav aria-label="Breadcrumb" className="pt-2">
-        <ol className="flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
-          <li>
-            <a
-              href={PAGE_PATHS.home}
-              onClick={(e) => {
-                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-                  e.preventDefault();
-                  onNavigate('home');
-                }
-              }}
-              className="hover:text-neutral-900 transition-colors cursor-pointer"
-            >
-              Home
-            </a>
-          </li>
-          <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
-          <li>
-            <a
-              href={PAGE_PATHS.blog}
-              onClick={(e) => {
-                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-                  e.preventDefault();
-                  onNavigate('blog');
-                }
-              }}
-              className="hover:text-neutral-900 transition-colors cursor-pointer"
-            >
-              Financial Guides
-            </a>
-          </li>
-          <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
-          <li className="font-semibold text-neutral-900 truncate max-w-xs sm:max-w-md">
-            {article.title}
-          </li>
-        </ol>
-      </nav>
+      {/* 1. TOP BACK BAR & BREADCRUMBS */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 pb-3 border-b border-neutral-200">
+        <button
+          type="button"
+          onClick={() => onNavigate('blog')}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow-xs group"
+          aria-label="Back to All Articles"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+          <span>Back to All Articles</span>
+        </button>
+
+        <nav aria-label="Breadcrumb">
+          <ol className="flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
+            <li>
+              <a
+                href={PAGE_PATHS.home}
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                    e.preventDefault();
+                    onNavigate('home');
+                  }
+                }}
+                className="hover:text-black transition-colors cursor-pointer"
+              >
+                Home
+              </a>
+            </li>
+            <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+            <li>
+              <a
+                href={PAGE_PATHS.blog}
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                    e.preventDefault();
+                    onNavigate('blog');
+                  }
+                }}
+                className="hover:text-black transition-colors cursor-pointer"
+              >
+                Blog
+              </a>
+            </li>
+            <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+            <li className="font-semibold text-black truncate max-w-[200px] sm:max-w-xs">
+              {article.title}
+            </li>
+          </ol>
+        </nav>
+      </div>
 
       {/* 2. ARTICLE HEADER */}
       <header className="space-y-6 max-w-4xl">
@@ -983,6 +995,32 @@ export default function BlogArticlePage({
             );
           })}
         </div>
+      </section>
+
+      {/* 21. BOTTOM NAVIGATION & BACK BUTTON */}
+      <section className="pt-8 border-t border-neutral-200 flex flex-wrap items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => {
+            onNavigate('blog');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-black text-white hover:bg-neutral-800 text-sm font-semibold transition-colors cursor-pointer shadow-xs group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+          <span>Back to All Articles</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            onNavigate('tools');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-300 bg-white text-black hover:bg-neutral-50 text-sm font-semibold transition-colors cursor-pointer"
+        >
+          <span>Explore 25 Online Tools &rarr;</span>
+        </button>
       </section>
     </article>
   );
