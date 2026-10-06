@@ -239,12 +239,22 @@ export default function Footer({ onNavigate }: FooterProps) {
               </li>
               <li>
                 <a
+                  href="/robots.txt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-400 hover:text-white transition-colors text-left block"
+                >
+                  Robots.txt
+                </a>
+              </li>
+              <li>
+                <a
                   href="/sitemap.xml"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-neutral-400 hover:text-white transition-colors text-left block"
                 >
-                  Sitemap
+                  XML Sitemap
                 </a>
               </li>
             </ul>
@@ -264,12 +274,14 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div>
             &copy; {new Date().getFullYear()} Money Master Blog. All rights reserved.
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
             <span>Written & Curated by Shahid Ali</span>
             <span>•</span>
-            <span>Educational Financial Content</span>
+            <a href="/robots.txt" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">
+              Robots.txt
+            </a>
             <span>•</span>
-            <a href="/sitemap.xml" className="hover:text-neutral-300 transition-colors">
+            <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">
               XML Sitemap
             </a>
           </div>

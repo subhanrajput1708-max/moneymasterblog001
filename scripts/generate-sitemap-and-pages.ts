@@ -16,7 +16,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { BLOG_ARTICLES, getRelatedArticles } from '../src/data/blogArticles';
+import { BLOG_ARTICLES, getRelatedArticles, getArticleImage } from '../src/data/blogArticles';
 import { TOOLS_DATA, TOOL_CATEGORIES, getToolById } from '../src/data/toolsData';
 import { ToolMeta } from '../src/types';
 import { CANONICAL_DOMAIN, PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from '../src/utils/routes';
@@ -763,22 +763,28 @@ function renderBlogIndexBody(): string {
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 48px;">
       ${BLOG_ARTICLES.map(article => {
         const postPath = getBloggerPostPath(article);
+        const articleImg = getArticleImage(article);
         return `
-        <article style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #6b7280; margin-bottom: 8px;">
-              <span style="font-weight: 600; color: #0284c7;">${escapeXml(article.category)}</span>
-              <time datetime="${formatDateToIso(article.publishedDate)}">${escapeXml(article.publishedDate)}</time>
+        <article style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+          <a href="${postPath}" style="display: block; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #f3f4f6; text-decoration: none;">
+            <img src="${articleImg.src}" alt="${escapeXml(articleImg.alt)}" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+          </a>
+          <div style="padding: 20px 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #6b7280; margin-bottom: 8px;">
+                <span style="font-weight: 600; color: #0284c7;">${escapeXml(article.category)}</span>
+                <time datetime="${formatDateToIso(article.publishedDate)}">${escapeXml(article.publishedDate)}</time>
+              </div>
+              <p style="font-size: 12px; color: #6b7280; margin: 0 0 8px 0;">Written by <strong style="color: #111827;">Shahid Ali</strong></p>
+              <h2 style="font-size: 19px; font-weight: 700; line-height: 1.35; margin: 0 0 10px 0;">
+                <a href="${postPath}" style="color: #111827; text-decoration: none;">${escapeXml(article.title)}</a>
+              </h2>
+              <p style="font-size: 14px; color: #4b5563; line-height: 1.55; margin: 0 0 16px 0;">${escapeXml(article.excerpt)}</p>
             </div>
-            <p style="font-size: 12px; color: #6b7280; margin: 0 0 8px 0;">Written by <strong style="color: #111827;">Shahid Ali</strong></p>
-            <h2 style="font-size: 20px; font-weight: 700; line-height: 1.35; margin: 0 0 10px 0;">
-              <a href="${postPath}" style="color: #111827; text-decoration: none;">${escapeXml(article.title)}</a>
-            </h2>
-            <p style="font-size: 14px; color: #4b5563; line-height: 1.55; margin: 0 0 16px 0;">${escapeXml(article.excerpt)}</p>
-          </div>
-          <div style="border-top: 1px solid #f3f4f6; padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 13px; color: #6b7280;">${escapeXml(article.readingTime)}</span>
-            <a href="${postPath}" style="background: #111827; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; text-decoration: none;">Read More →</a>
+            <div style="border-top: 1px solid #f3f4f6; padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; color: #6b7280;">${escapeXml(article.readingTime)}</span>
+              <a href="${postPath}" style="background: #111827; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; text-decoration: none;">Read More →</a>
+            </div>
           </div>
         </article>
       `;
@@ -790,6 +796,7 @@ function renderBlogIndexBody(): string {
 
 function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
   const related = getRelatedArticles(article.slug, 3);
+  const articleImg = getArticleImage(article);
   return `
   ${renderHeader()}
   <div style="max-width: 860px; margin: 0 auto; padding: 14px 16px 0 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
@@ -819,6 +826,15 @@ function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
         <h1 style="font-size: 34px; font-weight: 800; color: #111827; line-height: 1.25; margin: 0 0 16px 0;">${escapeXml(article.title)}</h1>
         <p style="font-size: 18px; color: #4b5563; line-height: 1.6; margin: 0;">${escapeXml(article.excerpt)}</p>
       </header>
+
+      <!-- FEATURED TOPIC IMAGE -->
+      <div style="margin-bottom: 32px; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; background: #f9fafb;">
+        <img src="${articleImg.src}" alt="${escapeXml(articleImg.alt)}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;" loading="eager" />
+        <div style="padding: 10px 16px; background: #ffffff; border-top: 1px solid #e5e7eb; font-size: 13px; color: #4b5563; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span>${escapeXml(articleImg.caption)}</span>
+          <span style="font-weight: 600; color: #111827;">Money Master Blog • Reference Visual</span>
+        </div>
+      </div>
 
       <!-- QUICK PRACTICAL ANSWER -->
       <section style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 32px;">
@@ -1370,11 +1386,13 @@ export function runGenerator() {
   fs.writeFileSync(publicCnamePath, 'www.moneymasterblog.site\n', 'utf-8');
   console.log(`✅ Verified CNAME in ${publicCnamePath}`);
 
-  // Write robots.txt to public
+  // Write robots.txt and robot.txt (singular alias) to public
   const robotsTxtContent = `User-agent: *\nAllow: /\n\nSitemap: ${CANONICAL_DOMAIN}/sitemap.xml\n`;
   const publicRobotsPath = path.join(publicDir, 'robots.txt');
   fs.writeFileSync(publicRobotsPath, robotsTxtContent, 'utf-8');
-  console.log(`✅ Verified robots.txt in ${publicRobotsPath}`);
+  const publicRobotPath = path.join(publicDir, 'robot.txt');
+  fs.writeFileSync(publicRobotPath, robotsTxtContent, 'utf-8');
+  console.log(`✅ Verified robots.txt & robot.txt in ${publicDir}`);
 
   // Write ads.txt to public
   const adsTxtContent = 'google.com, pub-8888653949280512, DIRECT, f08c47fec0942fa0\n';
@@ -1393,8 +1411,19 @@ export function runGenerator() {
     const distRobotsPath = path.join(distDir, 'robots.txt');
     fs.writeFileSync(distRobotsPath, robotsTxtContent, 'utf-8');
 
+    const distRobotPath = path.join(distDir, 'robot.txt');
+    fs.writeFileSync(distRobotPath, robotsTxtContent, 'utf-8');
+
     const distAdsPath = path.join(distDir, 'ads.txt');
     fs.writeFileSync(distAdsPath, adsTxtContent, 'utf-8');
+
+    const publicImagesDir = path.join(publicDir, 'images');
+    const distImagesDir = path.join(distDir, 'images');
+    if (fs.existsSync(publicImagesDir)) {
+      ensureDirectoryExistence(path.join(distImagesDir, 'placeholder.txt'));
+      fs.cpSync(publicImagesDir, distImagesDir, { recursive: true });
+      console.log('✅ Synchronized public/images to dist/images');
+    }
 
     const distIndexPath = path.join(distDir, 'index.html');
     if (fs.existsSync(distIndexPath)) {
@@ -1582,6 +1611,7 @@ export function runGenerator() {
         const canonicalUrl = getCanonicalUrl(postPath);
         const dateIso = formatDateToIso(article.publishedDate);
         const modIso = formatDateToIso(article.updatedDate || article.publishedDate);
+        const articleImg = getArticleImage(article);
 
         const breadcrumbs = [
           { '@type': 'ListItem', position: 1, name: 'Home', item: CANONICAL_DOMAIN },
@@ -1594,6 +1624,7 @@ export function runGenerator() {
             '@type': 'BlogPosting',
             headline: article.title,
             description: article.metaDescription,
+            image: `${CANONICAL_DOMAIN}${articleImg.src}`,
             url: canonicalUrl,
             datePublished: dateIso,
             dateModified: modIso,

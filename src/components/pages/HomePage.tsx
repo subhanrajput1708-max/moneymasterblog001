@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { PageId, ToolId } from '../../types';
 import { TOOLS_DATA } from '../../data/toolsData';
-import { BLOG_ARTICLES } from '../../data/blogArticles';
+import { BLOG_ARTICLES, getArticleImage } from '../../data/blogArticles';
 import { PAGE_PATHS, getBloggerPostPath, getToolPath } from '../../utils/routes';
 import LoanPaymentCalculator from '../tools/LoanPaymentCalculator';
 import { CATEGORY_STYLES } from './BlogPage';
@@ -499,25 +499,46 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
                 dot: 'bg-neutral-600',
               };
               const postPath = getBloggerPostPath(article);
+              const articleImg = getArticleImage(article);
 
               return (
                 <article
                   key={article.slug}
-                  className="p-6 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-xs transition-all flex flex-col justify-between"
+                  className="rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-xs transition-all flex flex-col justify-between overflow-hidden"
                 >
-                  <div>
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${catStyle.bg} ${catStyle.text} ${catStyle.border}`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full ${catStyle.dot}`}></span>
-                        <span>{article.category}</span>
-                      </span>
-                      <span className="text-[11px] text-neutral-400 flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        <span>{article.readingTime}</span>
-                      </span>
-                    </div>
+                  <a
+                    href={postPath}
+                    onClick={(e) => {
+                      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && onSelectArticle) {
+                        e.preventDefault();
+                        onSelectArticle(article.slug);
+                      }
+                    }}
+                    className="block w-full aspect-16/9 overflow-hidden bg-neutral-100 border-b border-neutral-100 cursor-pointer"
+                  >
+                    <img
+                      src={articleImg.src}
+                      alt={articleImg.alt}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
+
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${catStyle.bg} ${catStyle.text} ${catStyle.border}`}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full ${catStyle.dot}`}></span>
+                          <span>{article.category}</span>
+                        </span>
+                        <span className="text-[11px] text-neutral-400 flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span>{article.readingTime}</span>
+                        </span>
+                      </div>
 
                     <h3 className="text-lg font-bold text-neutral-900 leading-snug">
                       <a
@@ -559,7 +580,8 @@ export default function HomePage({ onNavigate, onSelectTool, onSelectArticle }: 
                       <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                   </div>
-                </article>
+                </div>
+              </article>
               );
             })}
           </div>

@@ -120,6 +120,7 @@ export interface BlogArticle {
     stages: DecisionFrameworkStage[];
   };
   checklist: string[];
+  image?: BlogArticleImage;
   faqs: {
     question: string;
     answer: string;
@@ -128,6 +129,12 @@ export interface BlogArticle {
     summary: string;
     nextSteps: string[];
   };
+}
+
+export interface BlogArticleImage {
+  src: string;
+  alt: string;
+  caption: string;
 }
 
 export type ToolCategory =

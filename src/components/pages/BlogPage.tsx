@@ -11,10 +11,11 @@ import {
   Wrench,
   CheckCircle2,
   SlidersHorizontal,
-  X
+  X,
+  Bot
 } from 'lucide-react';
 import { BlogArticle, BlogCategory, PageId, ToolId } from '../../types';
-import { BLOG_ARTICLES, BLOG_CATEGORIES, searchArticles } from '../../data/blogArticles';
+import { BLOG_ARTICLES, BLOG_CATEGORIES, searchArticles, getArticleImage } from '../../data/blogArticles';
 import { getBloggerPostPath } from '../../utils/routes';
 
 interface BlogPageProps {
@@ -196,6 +197,66 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
 
       {/* 3. ARTICLES GRID */}
       <section id="blog-articles-grid">
+        {/* Robots.txt and Sitemap search intent banner */}
+        {(searchQuery.toLowerCase().includes('robot') || searchQuery.toLowerCase().includes('sitemap') || searchQuery.toLowerCase().includes('crawler')) && (
+          <div className="p-6 rounded-2xl bg-neutral-900 text-white border border-neutral-800 shadow-md space-y-4 mb-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">Robots.txt &amp; Crawler Directives</h3>
+                  <p className="text-xs text-neutral-400">Search Engine Crawler Rules &amp; Indexing Configuration</p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Live &bull; HTTP 200 OK
+              </span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+              Looking for <strong>robots.txt</strong> or crawler rules? Money Master Blog maintains fully standard crawler directives at <code className="text-emerald-300 font-mono">/robots.txt</code> and <code className="text-emerald-300 font-mono">/robot.txt</code>. All search engines are permitted to index every financial guide, calculator, and tool.
+            </p>
+
+            <div className="p-4 bg-neutral-950 rounded-xl font-mono text-xs text-neutral-200 border border-neutral-800 space-y-1 overflow-x-auto">
+              <div className="text-neutral-500"># Crawl-Rule: Permit all standard search crawlers</div>
+              <div className="text-emerald-300">User-agent: *</div>
+              <div className="text-emerald-300">Allow: /</div>
+              <div className="text-neutral-500 pt-1"># Canonical XML Sitemap Location</div>
+              <div className="text-sky-300">Sitemap: https://www.moneymasterblog.site/sitemap.xml</div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <a
+                href="/robots.txt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 text-xs font-bold transition-colors cursor-pointer shadow-xs"
+              >
+                <span>View /robots.txt Directly &rarr;</span>
+              </a>
+              <a
+                href="/robot.txt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium transition-colors cursor-pointer"
+              >
+                <span>View /robot.txt (Alias) &rarr;</span>
+              </a>
+              <a
+                href="/sitemap.xml"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium transition-colors cursor-pointer"
+              >
+                <span>Open XML Sitemap &rarr;</span>
+              </a>
+            </div>
+          </div>
+        )}
+
         {filteredArticles.length === 0 ? (
           <div className="text-center py-16 px-4 rounded-2xl bg-white border border-neutral-200 space-y-4">
             <BookOpen className="w-12 h-12 text-neutral-400 mx-auto" />
@@ -217,12 +278,31 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredArticles.map((article, idx) => {
               const catStyle = CATEGORY_STYLES[article.category];
+              const articleImg = getArticleImage(article);
               return (
                 <article
                   key={article.id}
                   id={`article-card-${article.slug}`}
                   className="bg-white rounded-2xl border border-neutral-200 hover:border-neutral-300 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between overflow-hidden group"
                 >
+                  <a
+                    href={getBloggerPostPath(article)}
+                    onClick={(e) => {
+                      if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                        e.preventDefault();
+                        onSelectArticle(article.slug);
+                      }
+                    }}
+                    className="block w-full aspect-16/9 overflow-hidden bg-neutral-100 border-b border-neutral-100 cursor-pointer relative"
+                  >
+                    <img
+                      src={articleImg.src}
+                      alt={articleImg.alt}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
                   <div className="p-6 sm:p-7 space-y-4">
                     {/* Top row: Category Badge & Reading Time */}
                     <div className="flex items-center justify-between gap-2 text-xs">

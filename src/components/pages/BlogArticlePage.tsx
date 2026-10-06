@@ -27,7 +27,7 @@ import {
   FileCheck
 } from 'lucide-react';
 import { BlogArticle, PageId, ToolId } from '../../types';
-import { BLOG_ARTICLES, getRelatedArticles } from '../../data/blogArticles';
+import { BLOG_ARTICLES, getRelatedArticles, getArticleImage } from '../../data/blogArticles';
 import { CATEGORY_STYLES } from './BlogPage';
 import FaqSection from '../common/FaqSection';
 import { PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from '../../utils/routes';
@@ -53,6 +53,7 @@ export default function BlogArticlePage({
   const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
   const [helpfulVote, setHelpfulVote] = useState<'yes' | 'no' | null>(null);
   const [copiedSummary, setCopiedSummary] = useState(false);
+  const articleImage = getArticleImage(article);
 
   const toggleStep = (idx: number) => {
     setCheckedSteps(prev => ({ ...prev, [idx]: !prev[idx] }));
@@ -104,6 +105,7 @@ export default function BlogArticlePage({
           headline: article.h1,
           name: article.title,
           description: article.metaDescription,
+          image: getCanonicalUrl(articleImage.src),
           datePublished: article.publishedDate,
           dateModified: article.updatedDate,
           author: {
@@ -275,6 +277,21 @@ export default function BlogArticlePage({
           </div>
         </div>
       </header>
+
+      {/* FEATURED TOPIC IMAGE */}
+      <div className="max-w-4xl overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 shadow-2xs">
+        <img
+          src={articleImage.src}
+          alt={articleImage.alt}
+          referrerPolicy="no-referrer"
+          className="w-full aspect-16/9 object-cover"
+          loading="eager"
+        />
+        <div className="p-3 bg-white border-t border-neutral-200 flex flex-wrap items-center justify-between text-xs text-neutral-500 gap-2">
+          <span>{articleImage.caption}</span>
+          <span className="font-semibold text-neutral-700">Money Master Blog • Visual Analysis</span>
+        </div>
+      </div>
 
       {/* 3. QUICK PRACTICAL ANSWER */}
       <section id="quick-answer" className="max-w-4xl">
@@ -958,6 +975,7 @@ export default function BlogArticlePage({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {relatedArticles.map(rel => {
             const relStyle = CATEGORY_STYLES[rel.category];
+            const relImg = getArticleImage(rel);
             return (
               <a
                 key={rel.id}
@@ -968,9 +986,18 @@ export default function BlogArticlePage({
                     onSelectArticle(rel.slug);
                   }
                 }}
-                className="p-5 rounded-xl bg-white border border-neutral-200 hover:border-neutral-300 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer group text-left block"
+                className="p-4 sm:p-5 rounded-xl bg-white border border-neutral-200 hover:border-neutral-300 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between cursor-pointer group text-left block"
               >
-                <div className="space-y-2.5">
+                <div className="space-y-3">
+                  <div className="w-full aspect-16/9 overflow-hidden rounded-lg bg-neutral-100">
+                    <img
+                      src={relImg.src}
+                      alt={relImg.alt}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
                   <span
                     className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${relStyle.bg} ${relStyle.text}`}
                   >

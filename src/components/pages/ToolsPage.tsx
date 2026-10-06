@@ -35,6 +35,8 @@ import {
   HelpCircle,
   ThumbsUp,
   ThumbsDown,
+  Bot,
+  FileCode,
 } from 'lucide-react';
 import { ToolId, ToolCategory } from '../../types';
 import { TOOLS_DATA, TOOL_CATEGORIES, getToolById } from '../../data/toolsData';
@@ -556,6 +558,66 @@ export default function ToolsPage({ initialTool, onSelectTool }: ToolsPageProps)
         ) : (
           /* Directory Grid View */
           <div>
+            {/* Robots.txt and Sitemap search intent banner */}
+            {(searchQuery.toLowerCase().includes('robot') || searchQuery.toLowerCase().includes('sitemap') || searchQuery.toLowerCase().includes('crawler')) && (
+              <div className="p-6 rounded-2xl bg-neutral-900 text-white border border-neutral-800 shadow-md space-y-4 mb-8">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <Bot className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-base text-white">Robots.txt &amp; Crawler Directives</h3>
+                      <p className="text-xs text-neutral-400">Search Engine Crawler Rules &amp; Indexing Configuration</p>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 font-semibold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Live &bull; HTTP 200 OK
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                  You searched for <strong>{searchQuery}</strong>. Money Master Blog serves production-standard crawler directives directly at <code className="text-emerald-300 font-mono">/robots.txt</code> and <code className="text-emerald-300 font-mono">/robot.txt</code>. All search engine crawlers (Googlebot, Bingbot) are explicitly permitted to index all pages and calculators.
+                </p>
+
+                <div className="p-4 bg-neutral-950 rounded-xl font-mono text-xs text-neutral-200 border border-neutral-800 space-y-1 overflow-x-auto">
+                  <div className="text-neutral-500"># Crawl-Rule: Permit all standard search crawlers</div>
+                  <div className="text-emerald-300">User-agent: *</div>
+                  <div className="text-emerald-300">Allow: /</div>
+                  <div className="text-neutral-500 pt-1"># Canonical XML Sitemap Location</div>
+                  <div className="text-sky-300">Sitemap: https://www.moneymasterblog.site/sitemap.xml</div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <a
+                    href="/robots.txt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                  >
+                    <span>View /robots.txt Directly &rarr;</span>
+                  </a>
+                  <a
+                    href="/robot.txt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium transition-colors cursor-pointer"
+                  >
+                    <span>View /robot.txt (Alias) &rarr;</span>
+                  </a>
+                  <a
+                    href="/sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium transition-colors cursor-pointer"
+                  >
+                    <span>Open XML Sitemap &rarr;</span>
+                  </a>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-extrabold text-neutral-900 flex items-center gap-2">
                 <span>{activeCategory === 'All' ? 'All Free Tools' : activeCategory}</span>
