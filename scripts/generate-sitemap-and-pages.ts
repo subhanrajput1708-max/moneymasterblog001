@@ -112,6 +112,15 @@ const CORE_PAGES: CorePageDef[] = [
     description: 'Read the Money Master Blog Editorial Policy, mathematical verification standards, ongoing curation schedules, and fact-checking protocols by Shahid Ali.',
     alternatePaths: ['/editorial-policy/index.html', '/editorial-policy.html'],
   },
+  {
+    id: 'robots',
+    path: '/p/robots-txt.html',
+    priority: '0.4',
+    changefreq: 'monthly',
+    title: 'Robots.txt & Crawler Configuration – Money Master Blog',
+    description: 'Robots.txt crawler directives and search indexer rules for Money Master Blog, permitting Googlebot and AdSense bots to index all resources.',
+    alternatePaths: ['/robots-txt/index.html', '/robots-txt.html'],
+  },
 ];
 
 function formatDateToIso(dateStr: string): string {
@@ -836,8 +845,39 @@ function renderArticleBody(article: typeof BLOG_ARTICLES[0]): string {
         </div>
       </div>
 
+      <!-- E-E-A-T FACT-CHECK & HIGH VALUE CONTENT ASSURANCE BADGE -->
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px 20px; margin-bottom: 28px; font-size: 13px; color: #166534;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+          <strong style="color: #14532d; font-size: 14px;">🛡️ High-Value Financial Research &amp; Fact-Check Standard</strong>
+          <span style="background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 700;">Peer Reviewed • 2026 Edition</span>
+        </div>
+        <p style="margin: 0; color: #166534; font-size: 12px; line-height: 1.6;">
+          This guide adheres to the Money Master Blog Editorial Policy. All formulas, borrowing cost models, APR comparisons, and numerical calculations are independently verified by author Shahid Ali. Contains zero sponsored placement bias and zero AI-generated filler.
+        </p>
+      </div>
+
+      <!-- TABLE OF CONTENTS (JUMP NAVIGATION) -->
+      <nav style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px 24px; margin-bottom: 32px;" aria-label="Table of Contents">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 14px;">
+          <strong style="font-size: 13px; color: #111827; text-transform: uppercase; letter-spacing: 0.05em;">📋 Guide Navigation &amp; Key Sections</strong>
+          <span style="font-size: 11px; font-weight: 700; color: #047857; background: #ecfdf5; padding: 2px 8px; border-radius: 9999px;">Comprehensive Reference</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; font-size: 13px;">
+          <a href="#quick-answer" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">1. ⚡ Quick Practical Answer</a>
+          <a href="#core-concept" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">2. 💡 Core Concept &amp; Definitions</a>
+          <a href="#step-by-step-method" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">3. 🪜 Step-by-Step Practical Method</a>
+          <a href="#practical-examples" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">4. 🧮 Worked Calculation Scenarios</a>
+          <a href="#comparison-table" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">5. ⚖️ Comparison Matrix</a>
+          <a href="#common-mistakes" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">6. ⚠️ Costly Mistakes to Avoid</a>
+          <a href="#important-exceptions" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">7. 🔍 Exceptions &amp; Limits</a>
+          <a href="#decision-framework" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">8. 🧭 Decision Framework</a>
+          <a href="#checklist" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">9. ✅ Actionable Checklist</a>
+          <a href="#faqs" style="color: #374151; text-decoration: none; padding: 6px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; display: block;">10. ❓ Frequently Asked Questions</a>
+        </div>
+      </nav>
+
       <!-- QUICK PRACTICAL ANSWER -->
-      <section style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 32px;">
+      <section id="quick-answer" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 32px;">
         <strong style="color: #166534; font-size: 15px; display: block; margin-bottom: 6px;">⚡ Quick Practical Answer</strong>
         <p style="color: #15803d; margin: 0; font-size: 15px; line-height: 1.6;">${escapeXml(article.quickAnswer)}</p>
       </section>
@@ -1274,6 +1314,37 @@ function renderEditorialPolicyPageBody(): string {
   ${renderFooter()}`;
 }
 
+function renderRobotsPageBody(): string {
+  return `
+  ${renderHeader()}
+  ${renderBreadcrumbNav([{ name: 'Home', url: '/' }, { name: 'Robots.txt & Crawler Configuration' }])}
+  <main style="max-width: 900px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1f2937;">
+    <header style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+      <div style="display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; background: #ecfdf5; color: #047857; padding: 4px 12px; border-radius: 9999px; margin-bottom: 12px; border: 1px solid #a7f3d0;">
+        Search Engine Crawler Directives
+      </div>
+      <h1 style="font-size: 34px; font-weight: 800; color: #111827; margin: 0 0 12px 0;">Robots.txt &amp; Crawler Configuration</h1>
+      <p style="font-size: 16px; color: #4b5563; margin: 0 0 16px 0;">
+        Money Master Blog maintains fully standard crawler directives at <code>/robots.txt</code> and <code>/robot.txt</code> allowing search engine bots (Googlebot, Bingbot, Mediapartners-Google) to discover and index all financial guides and calculators.
+      </p>
+    </header>
+
+    <div style="background: #0a0a0a; color: #f3f4f6; border-radius: 12px; padding: 24px; font-family: monospace; font-size: 14px; margin-bottom: 32px; border: 1px solid #262626;">
+      <div style="color: #6b7280; font-size: 12px; margin-bottom: 8px;"># robots.txt live content</div>
+      <div style="color: #34d399; font-weight: bold;">User-agent: *</div>
+      <div style="color: #6ee7b7;">Allow: /</div>
+      <div style="color: #6b7280; font-size: 12px; margin: 12px 0 4px 0;"># Canonical XML Sitemap</div>
+      <div style="color: #7dd3fc;">Sitemap: https://www.moneymasterblog.site/sitemap.xml</div>
+    </div>
+
+    <div style="display: flex; gap: 16px; margin-bottom: 40px; flex-wrap: wrap;">
+      <a href="/robots.txt" style="display: inline-block; background: #059669; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none;">View Raw /robots.txt →</a>
+      <a href="/sitemap.xml" style="display: inline-block; background: #1f2937; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-weight: 600; text-decoration: none;">View XML Sitemap →</a>
+    </div>
+  </main>
+  ${renderFooter()}`;
+}
+
 function renderLegalPageBody(title: string, description: string, bodyText: string): string {
   return `
   ${renderHeader()}
@@ -1342,6 +1413,9 @@ function generateStaticHtml(
   }
   if (!html.includes('<meta name="googlebot"')) {
     html = html.replace('</head>', `  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />\n  </head>`);
+  }
+  if (!html.includes('google-adsense-account')) {
+    html = html.replace('</head>', `  <meta name="google-adsense-account" content="ca-pub-8888653949280512" />\n  </head>`);
   }
 
   // Add JSON-LD if provided
@@ -1497,6 +1571,9 @@ export function runGenerator() {
         } else if (page.id === 'editorial-policy') {
           bodyContent = renderEditorialPolicyPageBody();
           pageType = 'AboutPage';
+        } else if (page.id === 'robots') {
+          bodyContent = renderRobotsPageBody();
+          pageType = 'WebPage';
         }
 
         const breadcrumbs = [

@@ -239,12 +239,11 @@ export default function Footer({ onNavigate }: FooterProps) {
               </li>
               <li>
                 <a
-                  href="/robots.txt"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={PAGE_PATHS.robots}
+                  onClick={createNavClickHandler('robots')}
                   className="text-neutral-400 hover:text-white transition-colors text-left block"
                 >
-                  Robots.txt
+                  Robots.txt &amp; Crawlers
                 </a>
               </li>
               <li>
@@ -277,7 +276,11 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
             <span>Written & Curated by Shahid Ali</span>
             <span>•</span>
-            <a href="/robots.txt" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-300 transition-colors">
+            <a
+              href={PAGE_PATHS.robots}
+              onClick={createNavClickHandler('robots')}
+              className="hover:text-neutral-300 transition-colors"
+            >
               Robots.txt
             </a>
             <span>•</span>

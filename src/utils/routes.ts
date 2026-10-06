@@ -13,6 +13,7 @@ export const PAGE_PATHS: Record<PageId, string> = {
   terms: '/p/terms-conditions.html',
   disclaimer: '/p/disclaimer.html',
   'editorial-policy': '/p/editorial-policy.html',
+  robots: '/p/robots-txt.html',
 };
 
 /**
@@ -104,6 +105,17 @@ export function parseCurrentRoute(
   if (cleanPath.includes('/p/tools.html') || cleanPath === '/tools') {
     return { page: 'tools', articleSlug: null, toolId: paramTool };
   }
+  if (
+    cleanPath === '/robots.txt' ||
+    cleanPath === '/robot.txt' ||
+    cleanPath === '/robots' ||
+    cleanPath === '/robot' ||
+    cleanPath.includes('/p/robots-txt.html') ||
+    cleanPath.includes('/p/robots.html') ||
+    cleanPath.includes('/p/robot.html')
+  ) {
+    return { page: 'robots', articleSlug: null, toolId: null };
+  }
 
   // 5. Check legacy or fallback hash navigation
   if (hash) {
@@ -125,6 +137,7 @@ export function parseCurrentRoute(
       'terms',
       'disclaimer',
       'editorial-policy',
+      'robots',
     ];
     if (validPages.includes(hash as PageId)) {
       return { page: hash as PageId, articleSlug: null, toolId: paramTool };

@@ -17,6 +17,7 @@ import DisclaimerPage from './components/pages/DisclaimerPage';
 import EditorialPolicyPage from './components/pages/EditorialPolicyPage';
 import BlogPage from './components/pages/BlogPage';
 import BlogArticlePage from './components/pages/BlogArticlePage';
+import RobotsViewerPage from './components/pages/RobotsViewerPage';
 import { getArticleBySlug, BLOG_ARTICLES } from './data/blogArticles';
 import { getToolById } from './data/toolsData';
 import { parseCurrentRoute, PAGE_PATHS, getBloggerPostPath, getCanonicalUrl } from './utils/routes';
@@ -76,6 +77,11 @@ const PAGE_SEO: Record<PageId, PageSeoMeta> = {
     title: 'Editorial Policy & Content Quality Standards – Money Master Blog',
     description:
       'Read the Money Master Blog Editorial Policy, mathematical verification standards, ongoing curation schedules, and fact-checking protocols by Shahid Ali.',
+  },
+  robots: {
+    title: 'Robots.txt & Crawler Configuration – Money Master Blog',
+    description:
+      'View live robots.txt and crawler instructions for Money Master Blog, permitting search indexers and AdSense bots to crawl all practical money guides and financial calculators.',
   },
 };
 
@@ -312,6 +318,9 @@ export default function App() {
         )}
         {currentPage === 'editorial-policy' && (
           <EditorialPolicyPage onNavigate={handleNavigate} />
+        )}
+        {currentPage === 'robots' && (
+          <RobotsViewerPage onNavigate={handleNavigate} />
         )}
       </main>
 

@@ -86,27 +86,27 @@ export default function PrivacyPolicyPage() {
           </p>
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="p-3.5 rounded-lg border border-neutral-200 bg-white">
-              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Text Cleaner & Case Converter</strong>
+              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Loan &amp; Interest Payment Calculators</strong>
               <p className="text-xs text-neutral-600">
-                Any text pasted or typed into our editor is processed instantly in browser memory. It is never transmitted, saved, indexed, or used to train machine models.
+                Any financial numbers, loan principal values, interest percentages, or terms entered into our calculators are processed locally in your browser memory. No financial figures are ever sent to external databases or recorded on servers.
               </p>
             </div>
             <div className="p-3.5 rounded-lg border border-neutral-200 bg-white">
-              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Random Password Generator</strong>
+              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Percentage &amp; Tax Calculators</strong>
               <p className="text-xs text-neutral-600">
-                Passwords are created using <code>window.crypto.getRandomValues()</code> on your own processor. The generated credentials exist solely in your temporary browser state.
+                Tax brackets, GST breakdowns, percentage differences, and tip calculations execute instantaneously on your device processor using deterministic client-side JavaScript.
               </p>
             </div>
             <div className="p-3.5 rounded-lg border border-neutral-200 bg-white">
-              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Color Palette Generator</strong>
+              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Text &amp; String Formatting Utilities</strong>
               <p className="text-xs text-neutral-600">
-                Color combinations, HSL/HEX conversions, and luminance checks are calculated locally. No palette designs or project assets are uploaded.
+                Text cleaning, case conversion, URL decoding, and string transformations take place in memory without saving, indexing, or feeding text to machine learning models.
               </p>
             </div>
             <div className="p-3.5 rounded-lg border border-neutral-200 bg-white">
-              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Placeholder Text Generator</strong>
+              <strong className="block text-neutral-900 text-xs uppercase tracking-wider mb-1">Date &amp; Age Calculation Tools</strong>
               <p className="text-xs text-neutral-600">
-                Lorem Ipsum paragraphs and sentences are assembled dynamically in client memory from standard Latin root dictionaries.
+                Calendar dates, birthdays, and time interval comparisons are calculated purely via client JavaScript date engines without network telemetry.
               </p>
             </div>
           </div>
@@ -143,17 +143,47 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <div>
-          <h2 className="text-lg font-bold text-neutral-900 mb-2">4. Cookies and Local Storage Policy</h2>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">4. Cookies and Advertising Policy (Google AdSense &amp; Third-Party Partners)</h2>
           <p>
-            Money Master Blog does not employ third-party behavioral advertising cookies, tracking pixels, or cross-site fingerprinting technologies.
+            Money Master Blog works with third-party advertising partners, including <strong>Google AdSense</strong>, to serve relevant advertisements to our visitors. In accordance with Google Publisher Policies, we disclose the following practices:
           </p>
-          <p className="mt-2 text-neutral-600">
-            We may use your browser's native <code>localStorage</code> mechanism strictly to preserve non-sensitive interface preferences across reloads (for instance, remembering your selected tool tab or UI settings). This data remains exclusively on your own device and can be cleared at any time through your browser settings.
+          <ul className="list-disc pl-5 mt-2 space-y-2 text-neutral-600">
+            <li>
+              <strong>Third-Party Vendor Cookies:</strong> Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites on the internet.
+            </li>
+            <li>
+              <strong>Google DoubleClick DART Cookie:</strong> Google's use of advertising cookies enables it and its partners to serve ads to users based on their visits to Money Master Blog and other sites across the internet.
+            </li>
+            <li>
+              <strong>Opt-Out of Personalized Advertising:</strong> Users may opt out of personalized advertising at any time by visiting Google's <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-emerald-700 underline font-medium">Google Ads Settings</a>. Alternatively, users can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-emerald-700 underline font-medium">aboutads.info</a> or the <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer" className="text-emerald-700 underline font-medium">Network Advertising Initiative Opt-Out</a>.
+            </li>
+            <li>
+              <strong>First-Party Functional Storage:</strong> We use your browser's native <code>localStorage</code> strictly to remember non-sensitive interface preferences (such as tool inputs or calculator presets). This functional data stays strictly on your own device and can be cleared at any time in your browser settings.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">5. European Economic Area (EEA) &amp; UK User Rights (GDPR Compliance)</h2>
+          <p>
+            If you reside in the European Economic Area (EEA) or the United Kingdom, you have rights under the General Data Protection Regulation (GDPR), including the right to access, rectify, or erase any personal information we process. Because our calculation tools execute client-side and do not require user accounts, Money Master Blog does not collect or hold identifying profile records. For any consent choices or data privacy requests, you can contact our privacy controller directly at <a href="mailto:subhanrajput1708@gmail.com" className="text-emerald-700 underline font-medium">subhanrajput1708@gmail.com</a>.
           </p>
         </div>
 
         <div>
-          <h2 className="text-lg font-bold text-neutral-900 mb-2">5. Blog Section & Educational Guides Privacy</h2>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">6. California Consumer Privacy Rights (CCPA / CPRA Compliance)</h2>
+          <p>
+            Under the California Consumer Privacy Act (CCPA) and the California Privacy Rights Act (CPRA), California residents are entitled to specific disclosures regarding personal information:
+          </p>
+          <ul className="list-disc pl-5 mt-2 space-y-1.5 text-neutral-600">
+            <li><strong>No Sale of Personal Data:</strong> Money Master Blog does not sell, rent, or trade your personal information.</li>
+            <li><strong>Right to Know &amp; Delete:</strong> You have the right to request disclosure of information collected and request its deletion.</li>
+            <li><strong>Non-Discrimination:</strong> We do not discriminate against users who exercise their statutory privacy rights; all 25 tools and 20 guides remain 100% accessible to every visitor.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">7. Blog Section & Educational Guides Privacy</h2>
           <p>
             The Blog section on Money Master Blog provides 20 in-depth practical tutorials authored by Shahid Ali. We uphold strict reader privacy standards across all articles:
           </p>
@@ -166,26 +196,28 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <div>
-          <h2 className="text-lg font-bold text-neutral-900 mb-2">6. Children's Online Privacy</h2>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">8. Children's Online Privacy Protection (COPPA)</h2>
           <p>
-            Money Master Blog provides general utility tools for everyday digital tasks, suitable for students, writers, and designers of all ages. We do not knowingly collect personal identifiable information from children under the age of 13.
+            Money Master Blog provides general educational financial guides and browser utility tools suitable for students, researchers, and consumers. We do not knowingly collect personal identifiable information from children under the age of 13.
           </p>
         </div>
 
         <div>
-          <h2 className="text-lg font-bold text-neutral-900 mb-2">7. Changes to this Policy</h2>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">9. Changes to this Policy</h2>
           <p>
-            If we introduce new utilities or update existing data handling procedures, this document will be updated with an amended "Last updated" date. Continued use of the website indicates acceptance of the updated policy.
+            If we introduce new utilities, update advertising partners, or adjust data handling procedures, this document will be updated with an amended "Last updated" date. Continued use of the website indicates acceptance of the updated policy.
           </p>
         </div>
 
         <div>
-          <h2 className="text-lg font-bold text-neutral-900 mb-2">8. Contact the Website Author</h2>
+          <h2 className="text-lg font-bold text-neutral-900 mb-2">10. Contact Information & Data Controller</h2>
           <p>
-            If you have questions regarding this Privacy Policy or our client-side computing architecture, you can contact author Shahid Ali directly at:
+            If you have questions regarding this Privacy Policy, our AdSense integration, or cookie preferences, you can reach out directly to author and operator Shahid Ali:
           </p>
-          <div className="mt-2 p-3 bg-neutral-50 rounded-lg border border-neutral-200 inline-block text-xs sm:text-sm font-medium text-neutral-900">
-            contact@moneymasterblog.com
+          <div className="mt-2.5 p-3.5 bg-neutral-50 rounded-xl border border-neutral-200 text-xs sm:text-sm font-medium text-neutral-900 space-y-1">
+            <div><strong>Publisher &amp; Data Controller:</strong> Shahid Ali</div>
+            <div><strong>Email:</strong> <a href="mailto:subhanrajput1708@gmail.com" className="text-emerald-700 underline font-semibold">subhanrajput1708@gmail.com</a></div>
+            <div><strong>Website:</strong> https://www.moneymasterblog.site</div>
           </div>
         </div>
       </div>

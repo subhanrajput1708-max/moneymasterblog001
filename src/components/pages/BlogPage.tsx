@@ -229,11 +229,18 @@ export default function BlogPage({ onNavigate, onSelectArticle, onSelectTool }: 
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => onNavigate('robots')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 text-xs font-bold transition-colors cursor-pointer shadow-xs"
+              >
+                <span>Interactive Robots.txt &amp; Setup Guide &rarr;</span>
+              </button>
               <a
                 href="/robots.txt"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium transition-colors cursor-pointer"
               >
                 <span>View /robots.txt Directly &rarr;</span>
               </a>
